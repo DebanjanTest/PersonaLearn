@@ -1,0 +1,7 @@
+{
+  "name": "PersonaLearn",
+  "description": "A multi-persona educational platform for Students, Teachers, and Institutions featuring AI-powered tools, dashboards, and code playgrounds.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
