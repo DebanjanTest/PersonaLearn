@@ -1,9 +1,13 @@
 {
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/(?!.*\\.)(?!_next)(?!api)(.*)",
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/(?!.*\\.)",
       "destination": "/index.html"
     }
   ]
 }
-
