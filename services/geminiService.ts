@@ -659,7 +659,7 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-3-pro-image-preview', // Only this model supports googleSearch tool for now in some contexts, defaulting safe model
+            model: 'gemini-2.5-flash',
             contents: `Search for information on: "${query}". Return a concise summary.`,
             config: { tools: [{ googleSearch: {} }] }
         });
