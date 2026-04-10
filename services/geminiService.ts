@@ -11,22 +11,34 @@ const getAI = () => {
 // Helper to safely parse JSON from AI response
 const safeJSONParse = (text: string, fallback: any) => {
     try {
-        // 1. Try to find a JSON code block
-        const jsonBlock = text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-        if (jsonBlock && jsonBlock[1]) {
-            return JSON.parse(jsonBlock[1]);
+        // 1. Attempt to clean markdown code fences first (handles both [ and {)
+        const cleanText = text.replace(/```(?:json)?/g, '').replace(/```/g, '').trim();
+        return JSON.parse(cleanText);
+    } catch (e) {
+        // 2. If strict parse fails, try heuristic extraction
+        try {
+            const firstBrace = text.indexOf('{');
+            const firstBracket = text.indexOf('[');
+            let start = -1;
+            
+            // Find the earliest occurrence of { or [
+            if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+                start = firstBrace;
+            } else {
+                start = firstBracket;
+            }
+
+            const lastBrace = text.lastIndexOf('}');
+            const lastBracket = text.lastIndexOf(']');
+            const end = Math.max(lastBrace, lastBracket);
+
+            if (start !== -1 && end !== -1 && end > start) {
+                return JSON.parse(text.substring(start, end + 1));
+            }
+        } catch (e2) {
+            console.error("Fallback JSON extraction failed:", e2);
         }
         
-        // 2. Try to find the first { and last } if no block structure
-        const start = text.indexOf('{');
-        const end = text.lastIndexOf('}');
-        if (start !== -1 && end !== -1) {
-            return JSON.parse(text.substring(start, end + 1));
-        }
-
-        // 3. Try raw parse
-        return JSON.parse(text);
-    } catch (e) {
         console.error("JSON Parse Error:", e);
         return fallback;
     }
@@ -92,14 +104,14 @@ export const GeminiService = {
     }
   },
 
-  chat: async (history: {role: string, parts: {text: string}[]}[], message: string): Promise<string> => {
+  chat: async (history: {role: string, parts: {text: string}[]}[], message: string, systemContext?: string): Promise<string> => {
       try {
           const ai = getAI();
           const chat = ai.chats.create({
               model: 'gemini-2.5-flash',
               history: history,
               config: {
-                  systemInstruction: "You are a helpful and professional AI assistant."
+                  systemInstruction: systemContext || "You are a helpful and professional AI assistant."
               }
           });
           
@@ -325,19 +337,25 @@ export const GeminiService = {
         config: {
             responseMimeType: 'application/json',
             responseSchema: {
-            type: Type.ARRAY,
-            items: {
                 type: Type.OBJECT,
                 properties: {
-                front: { type: Type.STRING },
-                back: { type: Type.STRING },
-                },
-                required: ['front', 'back']
-            },
+                    flashcards: {
+                        type: Type.ARRAY,
+                        items: {
+                            type: Type.OBJECT,
+                            properties: {
+                                front: { type: Type.STRING },
+                                back: { type: Type.STRING },
+                            },
+                            required: ['front', 'back']
+                        }
+                    }
+                }
             },
         },
         });
-        return safeJSONParse(response.text || '[]', []);
+        const json = safeJSONParse(response.text || '{}', {});
+        return json.flashcards || [];
     } catch (e) {
         console.error("Gemini Flashcard Error:", e);
         throw new Error("Failed to generate flashcards.");
@@ -659,14 +677,13 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-3-pro-image-preview', // Only this model supports googleSearch tool for now in some contexts, defaulting safe model
+            model: 'gemini-2.5-flash', // Updated to 2.5 flash as 3-pro-image-preview is not standard text grounding
             contents: `Search for information on: "${query}". Return a concise summary.`,
             config: { tools: [{ googleSearch: {} }] }
         });
         return response.text;
       } catch (e) {
         console.error("Search Error:", e);
-        // Fallback to basic generation if search tool fails or model mismatch
         try {
             const ai = getAI();
             const response = await ai.models.generateContent({
@@ -678,5 +695,74 @@ export const GeminiService = {
              return "Search unavailable.";
         }
       }
-  }
+  },
+
+  findTechCourses: async (tech: string): Promise<any[]> => {
+      try {
+        const ai = getAI();
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: `Find 5 high-quality crash courses, tutorials, or documentation for learning "${tech}".
+            Prioritize official documentation, highly-rated YouTube playlists, and popular free courses.
+            
+            After searching, format the results strictly as a JSON object inside a code block.
+            Ensure you include the source URL for each item.
+            
+            Structure:
+            \`\`\`json
+            {
+                "courses": [
+                    {
+                        "title": "Course Title",
+                        "platform": "Platform Name (YouTube/Udemy/Docs)",
+                        "url": "Direct Link",
+                        "description": "Brief description",
+                        "difficulty": "Beginner/Intermediate"
+                    }
+                ]
+            }
+            \`\`\`
+            `,
+            config: {
+                tools: [{ googleSearch: {} }]
+            }
+        });
+        
+        const text = response.text || '{}';
+        const parsed = safeJSONParse(text, {});
+        return parsed.courses || []; 
+      } catch (e) {
+          console.error("Course Search Error:", e);
+          return [];
+      }
+  },
+
+  analyzeResume: async (resumeText: string, jobDesc: string = ''): Promise<any> => {
+      try {
+          const ai = getAI();
+          const prompt = `Act as an expert ATS (Applicant Tracking System) and Hiring Manager. Review the following resume${jobDesc ? ` for the Job Description: "${jobDesc}"` : ''}.
+          
+          Provide a structured review in JSON format:
+          1. score: 0-100 (Integer)
+          2. summary: Professional summary critique (max 2 sentences).
+          3. strengths: Array of 3 key strengths.
+          4. weaknesses: Array of 3 areas to improve.
+          5. missingKeywords: Array of important keywords missing (if JD provided) or industry standard keywords.
+          6. formatting: "Good" or suggestions for improvement.
+
+          Resume Content:
+          ${resumeText}
+          `;
+
+          const response = await ai.models.generateContent({
+              model: 'gemini-2.5-flash',
+              contents: prompt,
+              config: { responseMimeType: 'application/json' }
+          });
+          return safeJSONParse(response.text || '{}', {});
+      } catch (e) {
+          console.error("Resume Analysis Error:", e);
+          throw new Error("Analysis failed.");
+      }
+  },
 };

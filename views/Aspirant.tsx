@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Landmark, Bell, RefreshCw, ChevronLeft, ChevronRight, ExternalLink, Zap, CheckCircle, XCircle, Brain, BookOpen, AlertCircle, FileText, TrendingUp, Sparkles, Flag } from 'lucide-react';
 import { Card, Button, Badge, Input, Textarea, Label } from '../components/ui/Components';
 import { GeminiService } from '../services/geminiService';
+import { StorageService } from '../services/storageService';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { translations } from '../utils/translations';
 
@@ -26,10 +27,25 @@ const CurrentAffairsFeed: React.FC<{t: any}> = ({t}) => {
     const [loading, setLoading] = useState(false);
     const [index, setIndex] = useState(0);
 
-    const fetchNews = async () => {
+    const fetchNews = async (force = false) => {
         setLoading(true);
+        
+        if (!force) {
+            const cached = StorageService.getCachedCurrentAffairs();
+            if (cached && cached.length > 0) {
+                setNews(cached);
+                setIndex(0);
+                setLoading(false);
+                return;
+            }
+        }
+
         const data = await GeminiService.generateCurrentAffairs();
-        if (Array.isArray(data) && data.length > 0) { setNews(data); setIndex(0); }
+        if (Array.isArray(data) && data.length > 0) { 
+            setNews(data); 
+            setIndex(0);
+            StorageService.saveCurrentAffairs(data);
+        }
         setLoading(false);
     };
 
@@ -39,7 +55,7 @@ const CurrentAffairsFeed: React.FC<{t: any}> = ({t}) => {
         <Card className="h-full flex flex-col min-h-[400px]">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="font-bold flex items-center gap-2"><Bell className="w-4 h-4 text-orange-500" /> {t.dailyDigest}</h3>
-                <Button variant="ghost" size="sm" onClick={fetchNews} disabled={loading} className="h-6 w-6 p-0 rounded-full"><RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} /></Button>
+                <Button variant="ghost" size="sm" onClick={() => fetchNews(true)} disabled={loading} className="h-6 w-6 p-0 rounded-full"><RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} /></Button>
             </div>
             {loading ? (
                 <div className="flex-1 flex flex-col items-center justify-center space-y-3 opacity-50"><div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div><p className="text-xs text-muted">{t.loading}</p></div>
@@ -58,7 +74,7 @@ const CurrentAffairsFeed: React.FC<{t: any}> = ({t}) => {
                     </div>
                 </div>
             ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-muted text-sm gap-2"><p>No news available.</p><Button variant="ghost" size="sm" onClick={fetchNews} className="text-xs text-primary">{t.clear}</Button></div>
+                <div className="flex-1 flex flex-col items-center justify-center text-muted text-sm gap-2"><p>No news available.</p><Button variant="ghost" size="sm" onClick={() => fetchNews(true)} className="text-xs text-primary">{t.clear}</Button></div>
             )}
         </Card>
     );

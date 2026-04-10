@@ -114,5 +114,30 @@ export const StorageService = {
           activityData: rotatedChartData,
           upcomingExams: exams.filter(e => new Date(e.date) >= new Date()).sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 3)
       };
+  },
+
+  // Caching for Daily Digest
+  getCachedCurrentAffairs: () => {
+      const data = localStorage.getItem('daily_digest');
+      if (!data) return null;
+      try {
+        const parsed = JSON.parse(data);
+        const now = Date.now();
+        // 24 hours in ms = 86400000
+        if (now - parsed.timestamp > 86400000) {
+            localStorage.removeItem('daily_digest');
+            return null;
+        }
+        return parsed.data;
+      } catch (e) {
+          return null;
+      }
+  },
+
+  saveCurrentAffairs: (data: any[]) => {
+      localStorage.setItem('daily_digest', JSON.stringify({
+          timestamp: Date.now(),
+          data: data
+      }));
   }
 };

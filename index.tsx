@@ -1,14 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
-import mermaid from 'mermaid';
-
-// Initialize mermaid
-mermaid.initialize({ startOnLoad: false, theme: 'dark' });
-// Attach to window for the MermaidChart component to access
-// @ts-ignore
-window.mermaid = mermaid;
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
