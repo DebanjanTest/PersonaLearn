@@ -71,8 +71,18 @@ const MockInterview: React.FC<{t: any}> = ({t}) => {
             4. If the user struggles, offer a hint.
             `;
 
-            const response = await GeminiService.chat(history, input, systemContext);
-            setMessages([...newMessages, { role: 'ai', text: response }]);
+            // Add empty AI message to start streaming into
+            setMessages(prev => [...prev, { role: 'ai', text: '' }]);
+            
+            await GeminiService.chat(history, input, (chunk) => {
+                setMessages(prev => {
+                    const updated = [...prev];
+                    if (updated.length > 0 && updated[updated.length - 1].role === 'ai') {
+                        updated[updated.length - 1] = { ...updated[updated.length - 1], text: chunk };
+                    }
+                    return updated;
+                });
+            }, systemContext);
         } catch (e) {
             console.error(e);
             setMessages([...newMessages, { role: 'ai', text: "Sorry, I encountered an error. Please try again." }]);
@@ -494,34 +504,51 @@ export const InterviewDashboard: React.FC<{ lang: string, activeTab?: string }> 
             )
         }
         return (
-             <div className="space-y-6 animate-in fade-in">
+             <div className="space-y-8 animate-in fade-in">
                  {/* Hero Section */}
-                 <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-fuchsia-600 to-pink-700 p-8 shadow-2xl">
-                    <div className="relative z-10 flex justify-between items-end">
-                         <div className="text-white space-y-2">
-                             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+                 <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                         <div className="text-black space-y-4 max-w-2xl">
+                             <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                                  <Sparkles className="w-4 h-4" />
-                                 <span className="text-xs font-medium">Get Hired</span>
+                                 <span>Get Hired</span>
                              </div>
-                             <h1 className="text-3xl md:text-4xl font-bold">Land that dream job.</h1>
-                             <p className="text-fuchsia-100 max-w-lg">Your mock interview score improved by 15%. Keep practicing.</p>
+                             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                                Land that <br/> dream job.
+                             </h1>
+                             <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                                Your mock interview score improved by 15%. <br/> Keep practicing.
+                             </p>
+                             <div className="flex flex-wrap gap-4 pt-4">
+                                 <Button variant="secondary" size="lg">
+                                    Start Mock Interview
+                                 </Button>
+                                 <Button variant="danger" size="lg">
+                                    Review Resume
+                                 </Button>
+                             </div>
                          </div>
-                         <div className="hidden md:block opacity-80">
-                             <Target className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                             <Briefcase className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                         <div className="hidden md:block relative">
+                             <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] -rotate-3">
+                                <Target className="w-32 h-32 text-black" />
+                             </div>
+                             <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full rotate-12">
+                                <Briefcase className="w-12 h-12 text-white" />
+                             </div>
                          </div>
                     </div>
+                    <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
                 </div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
-                     <div className="space-y-6 flex flex-col">
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 h-full">
+                     <div className="space-y-8 flex flex-col">
                          <CareerRadar t={t} />
                          <GotchaDrill t={t} />
                      </div>
-                     <div className="space-y-6 flex flex-col">
+                     <div className="space-y-8 flex flex-col">
                           <TechCrashCourse t={t} />
                      </div>
-                     <div className="space-y-6 flex flex-col">
+                     <div className="space-y-8 flex flex-col">
                          <CTCDecoder t={t} />
                          <ThankYouGen t={t} />
                      </div>

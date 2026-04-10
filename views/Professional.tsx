@@ -147,9 +147,11 @@ const CorporateDocAnalyzer: React.FC<{t: any}> = ({t}) => {
     const handleAnalyze = async () => {
         if(!text) return;
         setLoading(true);
+        setResult('');
         try {
-            const res = await GeminiService.corporateSummarize(text, undefined, mode);
-            setResult(res);
+            await GeminiService.corporateSummarize(text, (chunk) => {
+                setResult(chunk);
+            }, undefined, mode);
         } catch(e) { console.error(e); } finally { setLoading(false); }
     }
 
@@ -330,39 +332,48 @@ export const ProfessionalDashboard: React.FC<ProfessionalProps> = ({ lang, activ
         return (
             <div className="space-y-8 animate-in fade-in">
                 {/* Hero Section */}
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-600 to-gray-800 p-8 shadow-2xl">
-                    <div className="relative z-10 flex justify-between items-end">
-                         <div className="text-white space-y-2">
-                             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+                <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                         <div className="text-black space-y-4 max-w-2xl">
+                             <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                                  <Sparkles className="w-4 h-4" />
-                                 <span className="text-xs font-medium">Welcome Back</span>
+                                 <span>Welcome Back</span>
                              </div>
-                             <h1 className="text-3xl md:text-4xl font-bold">Focus on impact today.</h1>
-                             <p className="text-slate-100 max-w-lg">You have 4 hours of meetings scheduled. Your efficiency score is up 12%.</p>
-                             <div className="flex gap-3 pt-4">
-                                 <Button onClick={() => onNavigate('docs')} className="bg-white text-slate-800 hover:bg-slate-50 border-0">
-                                    <Send className="w-4 h-4 mr-2" /> Draft Email
+                             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                                Focus on <br/> impact today.
+                             </h1>
+                             <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                                You have 4 hours of meetings scheduled. <br/> Your efficiency score is up 12%.
+                             </p>
+                             <div className="flex flex-wrap gap-4 pt-4">
+                                 <Button onClick={() => onNavigate('docs')} variant="secondary" size="lg">
+                                    <Send className="w-5 h-5 mr-2" /> Draft Email
                                  </Button>
-                                 <Button onClick={() => onNavigate('financials')} className="bg-slate-500/30 text-white hover:bg-slate-500/40 border-0 backdrop-blur-sm">
+                                 <Button onClick={() => onNavigate('financials')} variant="danger" size="lg">
                                     Log Hours
                                  </Button>
                              </div>
                          </div>
-                         <div className="hidden md:block opacity-80">
-                             <Building className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                             <Briefcase className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                         <div className="hidden md:block relative">
+                             <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] -rotate-3">
+                                <Building className="w-32 h-32 text-black" />
+                             </div>
+                             <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full rotate-12">
+                                <Briefcase className="w-12 h-12 text-white" />
+                             </div>
                          </div>
                     </div>
+                    <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in fade-in">
-                    <div className="lg:col-span-1 space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in">
+                    <div className="lg:col-span-1 space-y-8">
                         <LunchLearn t={t} />
                         <BurnoutBarometer t={t} />
                         <MeetingCostCalculator t={t} />
                     </div>
-                    <div className="lg:col-span-2 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="lg:col-span-2 space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <CorporateDocAnalyzer t={t} />
                             <CommunicationDrafter t={t} />
                         </div>

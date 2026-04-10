@@ -26,8 +26,42 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(240);
+  const [isResizing, setIsResizing] = useState(false);
 
   const t = translations[lang] || translations['en'];
+
+  const startResizing = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  const stopResizing = () => {
+    setIsResizing(false);
+  };
+
+  const resize = (e: MouseEvent) => {
+    if (isResizing) {
+      const newWidth = e.clientX;
+      if (newWidth > 180 && newWidth < 450) {
+        setSidebarWidth(newWidth);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (isResizing) {
+      window.addEventListener('mousemove', resize);
+      window.addEventListener('mouseup', stopResizing);
+    } else {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    }
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [isResizing]);
 
   // Map persona to theme class
   const getThemeClass = () => {
@@ -86,7 +120,7 @@ const Layout: React.FC<LayoutProps> = ({
   const PersonaButton = ({ p, label, icon: Icon, colorClass }: any) => (
       <button 
           onClick={() => handleMobileClick(() => onSwitchPersona(p))} 
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all text-left ${currentPersona === p ? `${colorClass} text-white shadow-md` : 'bg-surface text-muted hover:bg-black/5 dark:hover:bg-white/5 border border-border hover:text-text'}`}
+          className={`w-full flex items-center gap-3 px-3 py-2 border-2 border-border font-black uppercase text-[10px] tracking-tighter transition-all ${currentPersona === p ? `${colorClass} text-white shadow-[var(--brutalist-shadow-sm)] translate-x-[-1px] translate-y-[-1px]` : 'bg-surface text-text hover:bg-accent/20'}`}
       >
           <Icon className="w-4 h-4 shrink-0" />
           <span className="truncate">{label}</span>
@@ -94,78 +128,101 @@ const Layout: React.FC<LayoutProps> = ({
   );
 
   return (
-    <div className={`flex h-screen overflow-hidden bg-background text-text font-sans transition-colors duration-300 ${getThemeClass()}`}>
+    <div className={`flex h-screen overflow-hidden bg-background text-text font-sans transition-colors duration-500 ${getThemeClass()}`}>
       
       {sidebarOpen && (
         <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/90 z-40 lg:hidden backdrop-blur-[6px] animate-in fade-in duration-300"
             onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-surface border-r border-border transition-transform duration-300 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-xl lg:shadow-none`}>
-        <div className="h-16 flex items-center px-6 border-b border-border">
+      <aside 
+        style={{ width: sidebarOpen ? '100%' : `${sidebarWidth}px` }}
+        className={`fixed inset-y-0 left-0 z-50 bg-surface border-r-[4px] border-border transition-transform duration-500 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-[var(--brutalist-shadow)]`}
+      >
+        <div className="h-16 flex items-center px-5 border-b-[4px] border-border bg-surface">
           <button onClick={onLogoClick} className="flex items-center group focus:outline-none">
-            <div className="w-8 h-8 rounded-lg bg-primary mr-3 flex items-center justify-center shadow-[0_0_10px_rgba(var(--color-primary),0.5)] group-hover:scale-105 transition-transform">
-                <span className="text-white font-bold text-lg">P</span>
+            <div className="bg-danger text-white px-2 py-0.5 border-[3px] border-border font-black text-lg shadow-[var(--brutalist-shadow-sm)] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] transition-transform rounded-xl">
+                P
             </div>
-            <span className="text-xl font-bold tracking-tight text-text group-hover:text-primary transition-colors">PersonaLearn</span>
+            <span className="ml-2.5 text-lg font-black uppercase tracking-tighter text-text">PersonaLearn</span>
           </button>
-          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-muted hover:text-text">
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-text hover:scale-125 transition-transform">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-2 bg-surface dotted-bg">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleMobileClick(() => onNavigate(item.id))}
-              className={`w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all group ${currentView === item.id ? 'bg-primary/10 text-primary border border-primary/20 shadow-sm' : 'text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}
+              className={`w-full flex items-center px-4 py-2 border-[3px] border-border font-black uppercase text-[11px] tracking-widest transition-all rounded-xl ${currentView === item.id ? 'bg-primary text-black shadow-[var(--brutalist-shadow-sm)] translate-x-[-2px] translate-y-[-2px]' : 'bg-surface text-text hover:bg-accent/20'}`}
             >
-              <item.icon className={`w-5 h-5 mr-3 transition-colors ${currentView === item.id ? 'text-primary' : 'text-muted group-hover:text-primary'}`} />
-              {item.name}
+              <item.icon className={`w-4.5 h-4.5 mr-2.5 ${currentView === item.id ? 'text-black' : 'text-text'}`} />
+              {sidebarWidth > 180 && <span className="truncate">{item.name}</span>}
             </button>
           ))}
         </div>
 
-        <div className="p-4 border-t border-border space-y-3">
-             <div className="p-3 bg-background rounded-lg border border-border">
-                <p className="text-[10px] text-muted mb-2 font-mono uppercase tracking-widest">{t.switchRole || 'SWITCH ROLE'}</p>
-                <div className="space-y-1.5">
-                    <PersonaButton p="STUDENT" label="Student" icon={GraduationCap} colorClass="bg-violet-500" />
-                    <PersonaButton p="TEACHER" label="Teacher" icon={BookOpen} colorClass="bg-emerald-500" />
-                    <PersonaButton p="PROFESSIONAL" label="Professional" icon={Briefcase} colorClass="bg-slate-500" />
-                    <PersonaButton p="BUSINESS" label="Business" icon={Rocket} colorClass="bg-amber-500" />
-                    <PersonaButton p="INTERVIEW" label="Interview Prep" icon={Users} colorClass="bg-fuchsia-500" />
-                    <PersonaButton p="ASPIRANT" label="Aspirant" icon={Landmark} colorClass="bg-orange-500" />
+        <div className="p-4 border-t-[4px] border-border space-y-3 bg-surface">
+             {sidebarWidth > 200 && (
+                 <div className="p-3 bg-accent/10 border-[3px] border-border shadow-[var(--brutalist-shadow-sm)] rounded-xl">
+                    <p className="text-[9px] text-text mb-2 font-black uppercase tracking-[0.15em]">{t.switchRole || 'SWITCH ROLE'}</p>
+                    <div className="grid grid-cols-2 gap-1">
+                        <PersonaButton p="STUDENT" label="Student" icon={GraduationCap} colorClass="bg-violet-400" />
+                        <PersonaButton p="TEACHER" label="Teacher" icon={BookOpen} colorClass="bg-emerald-400" />
+                        <PersonaButton p="PROFESSIONAL" label="Professional" icon={Briefcase} colorClass="bg-blue-400" />
+                        <PersonaButton p="BUSINESS" label="Business" icon={Rocket} colorClass="bg-amber-400" />
+                        <PersonaButton p="INTERVIEW" label="Interview" icon={Users} colorClass="bg-fuchsia-400" />
+                        <PersonaButton p="ASPIRANT" label="Aspirant" icon={Landmark} colorClass="bg-orange-400" />
+                    </div>
                 </div>
-            </div>
+             )}
 
-            <Button variant="ghost" className="w-full justify-start text-sm" onClick={() => handleMobileClick(() => setSettingsOpen(true))}>
+            <Button variant="ghost" className="w-full justify-start border-[3px] border-border bg-surface text-text shadow-[var(--brutalist-shadow-sm)] rounded-xl" onClick={() => handleMobileClick(() => setSettingsOpen(true))}>
                 <Settings className="w-4 h-4 mr-2" />
-                {t.settings || 'Settings'}
+                {sidebarWidth > 180 && <span className="text-[11px]">{t.settings || 'Settings'}</span>}
             </Button>
         </div>
+
+        {/* Resize Handle */}
+        <div 
+          onMouseDown={startResizing}
+          className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize hover:bg-primary/30 transition-colors z-50 hidden lg:block"
+        />
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        <header className="lg:hidden flex items-center h-16 px-4 bg-surface border-b border-border z-20 relative shadow-sm">
-            <button onClick={() => setSidebarOpen(true)} className="text-muted p-2 hover:text-text">
+        <header className="lg:hidden flex items-center h-14 px-5 bg-surface border-b-[4px] border-border z-20 relative">
+            <button onClick={() => setSidebarOpen(true)} className="text-text p-2 hover:scale-125 transition-transform">
                 <Menu className="w-6 h-6" />
             </button>
-            <button onClick={onLogoClick} className="ml-4 font-bold text-text text-lg hover:text-primary transition-colors">
+            <button onClick={onLogoClick} className="ml-2.5 font-black uppercase text-text text-lg tracking-tighter">
                 PersonaLearn
             </button>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative">
-            <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" 
-                 style={{ backgroundImage: `radial-gradient(${theme === 'dark' ? '#ffffff' : '#000000'} 1px, transparent 1px)`, backgroundSize: '32px 32px' }}>
+        <main className="flex-1 overflow-y-auto relative bg-background transition-colors duration-500">
+            <div className="relative z-10 max-w-7xl mx-auto p-3 md:p-6 lg:p-8 pb-20">
+                {children}
             </div>
             
-            <div className="relative z-10 max-w-7xl mx-auto pb-10">
-                {children}
+            {/* Ticker at the bottom of main content */}
+            <div 
+                style={{ left: sidebarOpen ? '0' : `${sidebarWidth}px` }}
+                className="fixed bottom-0 right-0 z-30 transition-all duration-500"
+            >
+                <div className="ticker-wrap border-t-[4px] border-border">
+                    <div className="ticker">
+                        {[...Array(10)].map((_, i) => (
+                            <span key={i} className="ticker-item text-[9px]">
+                                {currentPersona} MODE ACTIVE + SYSTEM STATUS: OPTIMAL + AI GROUNDING: {currentPersona === 'BUSINESS' ? 'REAL-TIME' : 'STANDARD'} + LANGUAGE: {lang.toUpperCase()} + 
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
         </main>
       </div>

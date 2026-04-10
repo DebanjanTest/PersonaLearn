@@ -19,90 +19,123 @@ const languages = [
 
 const LandingPage: React.FC<LandingPageProps> = ({ onComplete, theme = 'dark' }) => {
     const [selectedLang, setSelectedLang] = useState('en');
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Get translations for selected language
     const t = translations[selectedLang] || translations['en'];
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!containerRef.current) return;
-        const { innerWidth, innerHeight } = window;
-        const x = (e.clientX - innerWidth / 2) / 25; // Division factor controls sensitivity
-        const y = (e.clientY - innerHeight / 2) / 25;
-        setMousePos({ x, y });
-    };
-
     return (
         <div 
             ref={containerRef}
-            onMouseMove={handleMouseMove}
-            className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-background text-text transition-colors duration-300"
+            className="min-h-screen flex flex-col bg-background text-text transition-colors duration-500 overflow-x-hidden selection:bg-accent selection:text-black dotted-bg"
         >
-             {/* Background Effects */}
-             <div className="absolute inset-0 z-0 opacity-[0.05]" 
-                 style={{ backgroundImage: `radial-gradient(${theme === 'dark' ? '#ffffff' : '#000000'} 1px, transparent 1px)`, backgroundSize: '32px 32px' }}>
-            </div>
-            
-            {/* Interactive Blobs */}
-            <div 
-                className="absolute top-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out will-change-transform"
-                style={{ transform: `translate(calc(-50% + ${mousePos.x * 1.5}px), calc(-50% + ${mousePos.y * 1.5}px))` }}
-            ></div>
-            <div 
-                className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/20 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 transition-transform duration-100 ease-out will-change-transform"
-                style={{ transform: `translate(calc(50% - ${mousePos.x}px), calc(50% - ${mousePos.y}px))` }}
-            ></div>
-
-            <div className="relative z-10 max-w-2xl w-full text-center space-y-8">
-                <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-4 shadow-lg shadow-primary/20 ring-1 ring-primary/30 animate-pulse-slow">
-                    <Sparkles className="w-8 h-8 text-primary" />
+            {/* Header / Nav Bar */}
+            <header className="fixed top-0 left-0 right-0 z-50 bg-surface text-text px-8 h-16 flex items-center justify-between border-b-[4px] border-border shadow-[var(--brutalist-shadow-sm)]">
+                <div className="flex items-center gap-3">
+                    <div className="bg-danger text-white px-2.5 py-1 border-[3px] border-border font-black text-xl shadow-[var(--brutalist-shadow-sm)] rounded-xl">P</div>
+                    <span className="text-xl font-black uppercase tracking-tighter">PersonaLearn</span>
                 </div>
-                
-                <div className="space-y-4">
-                    <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-text">
-                        {t.landingTitle}
-                    </h1>
-                    <p className="text-xl text-muted max-w-lg mx-auto leading-relaxed">
-                        {t.landingSubtitle}
-                    </p>
+                <div className="hidden md:flex items-center gap-10">
+                    {['Benefits', 'How it works', 'Pricing', 'FAQs'].map(item => (
+                        <a key={item} href="#" className="text-xs font-black uppercase tracking-widest hover:text-primary transition-colors">{item}</a>
+                    ))}
+                    <Button variant="secondary" size="md" onClick={() => onComplete(selectedLang)}>Launch App</Button>
                 </div>
+            </header>
 
-                <div className="bg-surface/50 backdrop-blur-md border border-border p-8 rounded-2xl shadow-xl animate-in fade-in zoom-in-95 duration-500">
-                    <div className="flex items-center justify-center gap-2 mb-6 text-muted">
-                        <Globe className="w-4 h-4" />
-                        <span className="text-sm font-medium uppercase tracking-widest">{t.selectLanguage}</span>
+            {/* Hero Section */}
+            <section className="pt-16 bg-primary text-white relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-8 py-10 md:py-12 flex flex-col md:flex-row items-center gap-10 relative z-10">
+                    <div className="flex-1 space-y-5">
+                        <div className="space-y-[-6px]">
+                            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+                                super <br/> <span className="text-white">hello</span>
+                            </h1>
+                        </div>
+                        <h2 className="text-xl md:text-3xl font-black uppercase tracking-tight text-black leading-tight">{t.landingTitle}</h2>
+                        <p className="text-base font-black uppercase opacity-90 tracking-wide max-w-lg">{t.landingSubtitle}</p>
+                        <div className="flex flex-wrap gap-4">
+                            <Button variant="secondary" size="md" className="text-base px-8 py-3 shadow-[var(--brutalist-shadow)]" onClick={() => onComplete(selectedLang)}>
+                                {t.continue} <ArrowRight className="w-5 h-5 ml-2" />
+                            </Button>
+                        </div>
                     </div>
+                    <div className="flex-1 relative hidden md:block">
+                        <div className="w-full max-w-sm aspect-square bg-white border-[5px] border-black shadow-[var(--brutalist-shadow)] rounded-[40px] flex items-center justify-center rotate-2 overflow-hidden">
+                             <img 
+                                src="https://picsum.photos/seed/robot/800/800" 
+                                alt="Brutalist Robot" 
+                                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                                referrerPolicy="no-referrer"
+                             />
+                        </div>
+                        <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-accent border-[3px] border-black shadow-[var(--brutalist-shadow-sm)] flex items-center justify-center rounded-full -rotate-12">
+                             <Sparkles className="w-12 h-12 text-black" />
+                        </div>
+                    </div>
+                </div>
+                {/* Wavy Divider */}
+                <div className="wavy-divider h-16 bg-accent"></div>
+            </section>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+            {/* Language Selection Section */}
+            <section className="bg-accent py-12 relative overflow-hidden border-b-[4px] border-border">
+                <div className="max-w-7xl mx-auto px-8 flex flex-col items-center gap-8">
+                    <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-center text-black">
+                        {t.selectLanguage}
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-xl">
                         {languages.map((lang) => (
                             <button
                                 key={lang.code}
                                 onClick={() => setSelectedLang(lang.code)}
-                                className={`p-4 rounded-xl border text-center transition-all duration-200 hover:scale-105 active:scale-95 ${
+                                className={`p-3 border-[3px] border-black font-black text-base uppercase tracking-widest transition-all rounded-xl shadow-[var(--brutalist-shadow-sm)] ${
                                     selectedLang === lang.code 
-                                    ? 'bg-primary border-primary text-white shadow-lg shadow-primary/25' 
-                                    : 'bg-background border-border text-muted hover:border-primary/50 hover:text-text'
+                                    ? 'bg-primary text-black translate-x-[-2px] translate-y-[-2px] shadow-[var(--brutalist-shadow)]' 
+                                    : 'bg-white text-black hover:bg-white/80'
                                 }`}
                             >
-                                <div className="text-sm font-semibold">{lang.name}</div>
-                                <div className="text-xs opacity-70 mt-1">{lang.native}</div>
+                                {lang.native}
                             </button>
                         ))}
                     </div>
-
-                    <Button 
-                        size="lg" 
-                        className="w-full h-14 text-lg" 
-                        onClick={() => onComplete(selectedLang)}
-                    >
-                        {t.continue} <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
                 </div>
-                
-                <p className="text-xs text-muted/50">
-                    {t.demoNote}
-                </p>
+                <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
+            </section>
+
+            {/* How it works */}
+            <section className="bg-surface py-16 border-t-[4px] border-border">
+                <div className="max-w-7xl mx-auto px-8">
+                    <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-center mb-12">How it works</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            { title: 'Subscribe', desc: 'Kickstart your design adventure by hopping on our monthly subscription. For just $2k, you get unlimited dibs on top-notch design work.', icon: Globe, color: 'bg-primary' },
+                            { title: 'Request', desc: "Alright, you're in! Now, it's time to toss your design tasks our way. Need a branding concept? A sleek landing page design? No sweat.", icon: Sparkles, color: 'bg-accent' },
+                            { title: 'Review', desc: "Hold tight! In just 48 hours, you'll get your first peek at your completed design. And if it's not love at first sight, no worries!", icon: ArrowRight, color: 'bg-danger' }
+                        ].map((step, i) => (
+                            <div key={i} className="bg-background border-[3px] border-border p-5 shadow-[var(--brutalist-shadow)] rounded-[24px] flex flex-col items-center text-center group hover:translate-y-[-4px] transition-transform">
+                                <div className={`w-20 h-20 ${step.color} border-[3px] border-border shadow-[var(--brutalist-shadow-sm)] flex items-center justify-center mb-6 rounded-xl group-hover:rotate-6 transition-transform`}>
+                                    <step.icon className="w-10 h-10 text-black" />
+                                </div>
+                                <h3 className="text-xl font-black uppercase tracking-tight mb-3">{step.title}</h3>
+                                <p className="text-sm font-medium text-muted leading-relaxed">{step.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Ticker */}
+            <div className="fixed bottom-0 left-0 right-0 z-50">
+                <div className="ticker-wrap border-t-[4px] border-border bg-black text-white">
+                    <div className="ticker">
+                        {[...Array(10)].map((_, i) => (
+                            <span key={i} className="ticker-item text-[10px]">
+                                {t.landingTitle.toUpperCase()} + {t.landingSubtitle.toUpperCase()} + PERSONA: {languages.find(l => l.code === selectedLang)?.name.toUpperCase()} + 
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

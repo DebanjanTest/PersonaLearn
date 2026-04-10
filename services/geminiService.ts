@@ -1,12 +1,14 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 const getAI = () => {
-    const apiKey = process.env.API_KEY; 
+    const apiKey = process.env.GEMINI_API_KEY; 
     if (!apiKey) {
-        console.warn("API_KEY is missing from environment variables.");
+        console.warn("GEMINI_API_KEY is missing from environment variables.");
     }
     return new GoogleGenAI({ apiKey: apiKey || 'dummy-key-to-prevent-crash' });
 };
+
+const MODEL_NAME = 'gemini-2.0-flash';
 
 // Helper to safely parse JSON from AI response
 const safeJSONParse = (text: string, fallback: any) => {
@@ -70,7 +72,7 @@ export const GeminiService = {
           parts.push({ text: prompt });
 
           const response = await ai.models.generateContent({
-              model: 'gemini-2.5-flash',
+              model: MODEL_NAME,
               contents: { parts },
               config: {
                   responseMimeType: 'application/json',
@@ -84,7 +86,7 @@ export const GeminiService = {
       }
   },
 
-  summarize: async (text: string, file?: FileData): Promise<string> => {
+  summarize: async (text: string, onChunk?: (text: string) => void, file?: FileData): Promise<string> => {
     try {
         const ai = getAI();
         const parts: any[] = [];
@@ -93,22 +95,26 @@ export const GeminiService = {
         }
         parts.push({ text: `Summarize the following content concisely for a student study aid.\n\nAdditional Context/Prompt: ${text}` });
 
+        // Note: @google/genai 1.33.0 might not support streaming in this specific way
+        // Reverting to standard generateContent for stability but using 2.0-flash for speed
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: { parts },
         });
-        return response.text || "Could not generate summary.";
+        const result = response.text || "Could not generate summary.";
+        if (onChunk) onChunk(result);
+        return result;
     } catch (e) {
         console.error("Gemini Summarize Error:", e);
         throw new Error("Failed to generate summary. Please check your connection.");
     }
   },
 
-  chat: async (history: {role: string, parts: {text: string}[]}[], message: string, systemContext?: string): Promise<string> => {
+  chat: async (history: {role: string, parts: {text: string}[]}[], message: string, onChunk?: (text: string) => void, systemContext?: string): Promise<string> => {
       try {
           const ai = getAI();
           const chat = ai.chats.create({
-              model: 'gemini-2.5-flash',
+              model: MODEL_NAME,
               history: history,
               config: {
                   systemInstruction: systemContext || "You are a helpful and professional AI assistant."
@@ -116,14 +122,16 @@ export const GeminiService = {
           });
           
           const response = await chat.sendMessage({ message });
-          return response.text || "No response generated.";
+          const result = response.text || "No response generated.";
+          if (onChunk) onChunk(result);
+          return result;
       } catch (e) {
           console.error("Chat Error:", e);
           throw new Error("Chat service unavailable.");
       }
   },
 
-  corporateSummarize: async (text: string, file: FileData | undefined, mode: 'EXEC' | 'ACTION' | 'ELI5'): Promise<string> => {
+  corporateSummarize: async (text: string, onChunk?: (text: string) => void, file?: FileData, mode: 'EXEC' | 'ACTION' | 'ELI5' = 'EXEC'): Promise<string> => {
      try {
         const ai = getAI();
         const parts: any[] = [];
@@ -143,10 +151,12 @@ export const GeminiService = {
         parts.push({ text: `${prompt}\n\nContext/Text: ${text}` });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: { parts }
         });
-        return response.text || "Could not generate analysis.";
+        const result = response.text || "Could not generate analysis.";
+        if (onChunk) onChunk(result);
+        return result;
      } catch (e) {
          console.error("Corporate Summarize Error:", e);
          throw new Error("Analysis failed.");
@@ -161,7 +171,7 @@ export const GeminiService = {
             : "Refactor the following code to reduce cyclomatic complexity and improve memory usage. Explain your changes briefly.";
         
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `${prompt}\n\nCode:\n${code}`
         });
         return response.text || "No feedback generated.";
@@ -171,15 +181,28 @@ export const GeminiService = {
       }
   },
 
+  streamText: async (prompt: string, onChunk: (text: string) => void): Promise<string> => {
+      try {
+        const ai = getAI();
+        const response = await ai.models.generateContent({
+            model: MODEL_NAME,
+            contents: prompt
+        });
+        let fullText = response.text || '';
+        if (onChunk) onChunk(fullText);
+        return fullText;
+      } catch (e) {
+          console.error("Stream Text Error:", e);
+          throw new Error("Failed to stream text.");
+      }
+  },
+
   polishEmail: async (content: string, tone: 'DIPLOMATIC' | 'ASSERTIVE' | 'LEADERSHIP'): Promise<string> => {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: `Rewrite the following draft email/text to be ${tone.toLowerCase()}.
-            
-            Context:
-            ${content}`
+            model: MODEL_NAME,
+            contents: `Rewrite the following draft email/text to be ${tone.toLowerCase()}.\n\nContext:\n${content}`
         });
         return response.text || "Could not polish text.";
       } catch (e) {
@@ -192,7 +215,7 @@ export const GeminiService = {
       try {
           const ai = getAI();
           const response = await ai.models.generateContent({
-              model: 'gemini-2.5-flash',
+              model: MODEL_NAME,
               contents: `Perform a ${framework} analysis for the following business concept or company: "${topic}".
               
               Return the result strictly as a JSON object with keys corresponding to the framework categories.
@@ -212,7 +235,7 @@ export const GeminiService = {
       try {
           const ai = getAI();
           const response = await ai.models.generateContent({
-              model: 'gemini-2.5-flash',
+              model: MODEL_NAME,
               contents: `Create a 5-slide pitch deck outline for this business idea: "${idea}".
               
               Return strictly a JSON array of objects:
@@ -245,7 +268,7 @@ export const GeminiService = {
     try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `Generate a 5-question multiple choice quiz on the topic: "${topic}". 
             Include a mix of difficult and moderate questions suitable for competitive exams.
             
@@ -285,7 +308,7 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `Perform a Google Search for the latest current affairs news (from today and yesterday) relevant for Indian competitive exams (UPSC/SSC).
             Focus on: International Relations, National Policy, Science/Space, and Economics.
             
@@ -332,7 +355,7 @@ export const GeminiService = {
         parts.push({ text: `Create 5 study flashcards from the provided content. Return valid JSON.\n\nContext: ${content}` });
 
         const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: MODEL_NAME,
         contents: { parts },
         config: {
             responseMimeType: 'application/json',
@@ -393,7 +416,7 @@ export const GeminiService = {
         parts.push({ text: prompt });
 
         const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: MODEL_NAME,
         contents: { parts },
         config: {
             responseMimeType: 'application/json',
@@ -493,7 +516,7 @@ export const GeminiService = {
             ${content}` });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: { parts }
         });
         let text = response.text || '';
@@ -509,7 +532,7 @@ export const GeminiService = {
      try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `Act as a code execution engine. Simulate the output of the following ${language} code. 
             If there is an error, describe it. Only provide the output, no conversational filler.
             
@@ -550,7 +573,7 @@ export const GeminiService = {
         parts.push({ text: prompt });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: { parts },
             config: {
                 responseMimeType: 'application/json',
@@ -596,7 +619,7 @@ export const GeminiService = {
     try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `Evaluate the following student answers based on the questions and reference answers provided.
             
             Strict Rules for Evaluation:
@@ -649,7 +672,7 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: "Analyze a hypothetical student's recent poor performance in Calculus (Derivatives) and Physics (Kinematics). Suggest 3 specific areas for improvement.",
             config: {
                 responseMimeType: 'application/json',
@@ -677,7 +700,7 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash', // Updated to 2.5 flash as 3-pro-image-preview is not standard text grounding
+            model: MODEL_NAME,
             contents: `Search for information on: "${query}". Return a concise summary.`,
             config: { tools: [{ googleSearch: {} }] }
         });
@@ -687,7 +710,7 @@ export const GeminiService = {
         try {
             const ai = getAI();
             const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: MODEL_NAME,
                 contents: query
             });
             return response.text;
@@ -701,7 +724,7 @@ export const GeminiService = {
       try {
         const ai = getAI();
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: MODEL_NAME,
             contents: `Find 5 high-quality crash courses, tutorials, or documentation for learning "${tech}".
             Prioritize official documentation, highly-rated YouTube playlists, and popular free courses.
             
@@ -755,7 +778,7 @@ export const GeminiService = {
           `;
 
           const response = await ai.models.generateContent({
-              model: 'gemini-2.5-flash',
+              model: MODEL_NAME,
               contents: prompt,
               config: { responseMimeType: 'application/json' }
           });

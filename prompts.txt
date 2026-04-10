@@ -1,25 +1,64 @@
-MASTER PROJECT SPECIFICATION PERSONALEARN
+# PROJECT REPORT: PERSONALEARN - AI-POWERED MULTI-PERSONA ECOSYSTEM
 
-THE VISION
-PersonaLearn is a Fluid Intelligence Platform that breaks the rigid silos of traditional education tech. It recognizes that a user can be a student a teacher and a professional all in one day. The interface and AI context shift instantly based on the active Persona transforming from a study companion to an administrative assistant or a corporate productivity tool.
+## 1. PROJECT OVERVIEW
+**PersonaLearn** is a cutting-edge, fluid intelligence platform designed to bridge the gap between different stages of a learner's journey. Unlike traditional LMS platforms, PersonaLearn adapts its entire interface, tools, and AI context based on the user's active "Persona." It serves as a study companion for students, an administrative assistant for teachers, a productivity hub for professionals, and a strategic advisor for entrepreneurs.
 
-STUDENT PERSONA
-The Student view creates a self contained learning environment. The Dashboard drives motivation with Study Streaks and Weekly Goals while AI analyzes activity to suggest specific Improvement Areas. The suite of AI Study Tools transforms passive reading into active engagement. Immersive Flashcards feature 3D animations for focused review. The Smart QA Generator creates structured tests including Fill in the Blanks and MCQs rendered in interactive cards rather than raw text. The Group Project Tracker analyzes chat logs to visualize individual contributions and solve credit disputes. The Citation Generator provides instant APA and MLA formatting. Visual Mind Maps turn complex text into clear hierarchical diagrams. The Exam Simulator allows students to upload content generate custom exams take them in a realistic environment and receive immediate AI grading with granular feedback. The Code Playground offers a safe simulation environment for JavaScript Python C plus plus and HTML.
+## 2. CORE WORKINGS & ARCHITECTURE
+The application is a full-stack Single Page Application (SPA) built with a focus on speed, modularity, and AI-first interactions.
+- **Frontend**: React 19 with TypeScript for robust type safety.
+- **Styling**: Tailwind CSS utilizing a custom CSS variable system for dynamic, persona-based theming.
+- **AI Engine**: Google Gemini 2.5 Flash, integrated via the `@google/genai` SDK.
+- **Data Persistence**: Hybrid storage using `LocalStorage` and `IndexedDB` (via a dedicated `StorageService`) to ensure a persistent, app-like experience without a mandatory backend database.
+- **Document Generation**: `jsPDF` for generating professional, print-ready examination papers.
+- **Visualizations**: `Recharts` for data-driven dashboards and `Mermaid.js` for AI-generated mind maps.
 
-TEACHER PERSONA
-The Teacher view reduces administrative burden. The Advanced Exam Creator generates professional print ready exam papers complete with school branding and precise control over question distribution. The Classroom tool serves as a digital attendance register allowing teachers to log presence and behavioral notes efficiently. Performance Analytics transform raw grade sheets into actionable insights identifying at risk students and visualizing class performance trends on a bell curve.
+## 3. UI/UX DESIGN PHILOSOPHY
+The UI is designed to be "Mood-Adaptive."
+- **Dynamic Theming**: Each persona triggers a global CSS class (e.g., `.theme-student`, `.theme-teacher`) that overrides the `--color-primary` variable.
+    - *Student*: Violet (Focus & Creativity)
+    - *Teacher*: Emerald (Growth & Organization)
+    - *Professional*: Slate (Stability & Efficiency)
+    - *Business*: Amber (Energy & Ambition)
+    - *Interview*: Fuchsia (Confidence)
+    - *Aspirant*: Orange (Determination)
+- **Layout Planning**: A persistent sidebar handles high-level navigation and persona switching, while the main content area uses a "Bento Box" grid layout for dashboards.
+- **Interactive Micro-animations**: 3D-flip flashcards, staggered list entrances, and pulse effects for AI generation states.
 
-PROFESSIONAL PERSONA
-Designed for workplace efficiency this persona includes a Financial Health Widget to visualize income allocation and a Burnout Barometer to monitor work hours. The Meeting Cost Calculator tracks the real time financial impact of meetings. The Communication Lab offers tools like a Slang Translator to decode corporate jargon a LinkedIn Ghostwriter for personal branding and an Email Polisher to ensure diplomatic communication.
+## 4. LANGUAGE ADAPTABILITY (i18n)
+PersonaLearn features a custom translation engine supporting 6 major languages:
+- English, Hindi (हिन्दी), Bengali (বাংলা), Punjabi (ਪੰਜਾਬੀ), Marathi (मराठी), and Telugu (తెలుగు).
+- The system uses a centralized `translations.ts` utility that maps keys to localized strings, ensuring the entire UI—from buttons to AI prompts—is accessible to a diverse user base.
 
-BUSINESS PERSONA
-For entrepreneurs the Strategy Center generates SWOT and PESTLE analyses. The Pitch Deck Generator creates slide outlines with visual suggestions. The Brand Kit Generator offers industry specific color palettes and font pairings. The Competitor Spy leverages Google Search to provide real time pricing intelligence.
+## 5. PERSONA-SPECIFIC IMPLEMENTATIONS
 
-INTERVIEW PREP PERSONA
-Job seekers benefit from a Resume Scanner that scores CVs against job descriptions. The Mock Interview Simulator conducts adaptive role specific interviews with instant feedback. The Offer Letter Decoder scans contracts to highlight potential legal red flags.
+### A. Student UI Planning
+- **Dashboard**: Features a "Study Streak" flame, weekly goal progress bars, and AI-driven "Improvement Areas" based on performance.
+- **AI Study Tools**: 
+    - *Summarizer*: Condenses long texts/PDFs.
+    - *Flashcards*: Generates interactive 3D cards.
+    - *Mind Maps*: Uses Mermaid.js to visualize hierarchies.
+    - *Smart Q&A*: Generates structured tests (MCQs, Fill-in-blanks) with instant feedback.
+- **Exam Simulator**: A realistic testing environment where students can take AI-generated exams and receive granular grading.
+- **Code Playground**: A multi-language (JS, Python, C++, HTML) simulation environment.
 
-ASPIRANT PERSONA
-Competitive exam candidates access a Daily Digest of relevant news. The Trend Probability tool predicts topic relevance based on past patterns while the Mnemonic Generator creates memory aids for complex facts.
+### B. Teacher Frontend Details
+- **Advanced Exam Creator**: A sophisticated tool allowing teachers to upload materials, set branding (school logo/name), and define question distribution (e.g., 10 MCQs, 5 Short Answers). It produces a professional PDF layout.
+- **Classroom Management**: Digital attendance tracker with behavioral note-taking capabilities.
+- **Performance Analytics**: Visualizes class performance on a bell curve, identifying "At-Risk" students automatically through data analysis.
 
-TECHNICAL ARCHITECTURE
-The platform runs on a responsive multilingual framework supporting English Hindi Bengali Punjabi Marathi and Telugu. It utilizes Hybrid Storage with IndexedDB and LocalStorage for a persistent app like feel. Powered by Gemini 2 5 Flash it delivers fast multimodal intelligence across all personas with dynamic theming that adapts the visual mood to the user's current role.
+### C. Professional & Business Workings
+- **Professional**: Includes a "Burnout Barometer" to track work-life balance and a "Communication Lab" for polishing emails and decoding corporate jargon.
+- **Business**: Strategy Center for generating SWOT/PESTLE analyses and a "Competitor Spy" that uses Google Search grounding for real-time market intelligence.
+
+## 6. API INTEGRATION & AI CAPABILITIES
+The **Gemini API** is the heart of the platform, utilized through several specialized methods:
+- **Multimodal Analysis**: Processing PDFs and Images (via Base64) for document intelligence.
+- **Structured Output**: Using `responseMimeType: 'application/json'` and `responseSchema` to ensure AI responses perfectly fit the UI components.
+- **Google Search Grounding**: Used in the "Aspirant" and "Business" personas for real-time news and pricing data.
+- **Code Simulation**: Acting as a virtual execution engine for the Code Playground.
+
+## 7. ADVANCED NAVIGATION & ELEMENT PLACEMENT
+- **Primary Nav**: Sidebar (Left on Desktop, Hamburger on Mobile) contains Persona-specific tools.
+- **Secondary Nav**: Top-level tabs within views (e.g., Teacher's Dashboard vs. Exam Creator).
+- **Quick Actions**: Floating buttons or prominent dashboard cards for the most-used features (e.g., "Upload Notes").
+- **Contextual Settings**: A global settings modal for language and theme (Dark/Light) toggling.

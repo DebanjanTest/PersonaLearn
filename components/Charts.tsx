@@ -11,24 +11,24 @@ interface ChartProps {
 
 export const StudyActivityChart: React.FC<ChartProps> = ({ data, theme = 'dark' }) => {
     const isDark = theme === 'dark';
-    const axisColor = isDark ? '#A1A1AA' : '#71717A'; // Muted color
-    const gridColor = isDark ? '#3F3F46' : '#E4E4E7'; // Border color
-    const tooltipBg = isDark ? '#2A2A2A' : '#FFFFFF';
-    const tooltipColor = isDark ? '#F0F2F5' : '#18181B';
+    const axisColor = isDark ? '#FFFFFF' : '#000000';
+    const gridColor = isDark ? '#3F3F46' : '#000000';
+    const tooltipBg = isDark ? '#18181B' : '#FFFFFF';
+    const tooltipColor = isDark ? '#FFFFFF' : '#000000';
 
     return (
         <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
-                    <XAxis dataKey="name" stroke={axisColor} tick={{fill: axisColor}} tickLine={false} axisLine={false} />
-                    <YAxis stroke={axisColor} tick={{fill: axisColor}} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="0" stroke={gridColor} vertical={false} />
+                    <XAxis dataKey="name" stroke={axisColor} tick={{fill: axisColor, fontWeight: 'bold'}} tickLine={true} axisLine={true} />
+                    <YAxis stroke={axisColor} tick={{fill: axisColor, fontWeight: 'bold'}} tickLine={true} axisLine={true} />
                     <Tooltip 
-                        contentStyle={{ backgroundColor: tooltipBg, border: `1px solid ${gridColor}`, color: tooltipColor, borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} 
-                        itemStyle={{ color: tooltipColor }}
-                        cursor={{fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}}
+                        contentStyle={{ backgroundColor: tooltipBg, border: `2px solid ${axisColor}`, color: tooltipColor, borderRadius: '0px', boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }} 
+                        itemStyle={{ color: tooltipColor, fontWeight: 'bold' }}
+                        cursor={{fill: 'rgba(0,0,0,0.1)'}}
                     />
-                    <Bar dataKey="value" fill="#29ABE2" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="value" fill="rgb(var(--color-primary))" stroke="#000" strokeWidth={2} />
                 </BarChart>
             </ResponsiveContainer>
         </div>
@@ -37,23 +37,23 @@ export const StudyActivityChart: React.FC<ChartProps> = ({ data, theme = 'dark' 
 
 export const EnrollmentTrendChart: React.FC<ChartProps> = ({ data, theme = 'dark' }) => {
     const isDark = theme === 'dark';
-    const axisColor = isDark ? '#A1A1AA' : '#71717A';
-    const gridColor = isDark ? '#3F3F46' : '#E4E4E7';
-    const tooltipBg = isDark ? '#2A2A2A' : '#FFFFFF';
-    const tooltipColor = isDark ? '#F0F2F5' : '#18181B';
+    const axisColor = isDark ? '#FFFFFF' : '#000000';
+    const gridColor = isDark ? '#3F3F46' : '#000000';
+    const tooltipBg = isDark ? '#18181B' : '#FFFFFF';
+    const tooltipColor = isDark ? '#FFFFFF' : '#000000';
 
     return (
         <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
-                    <XAxis dataKey="name" stroke={axisColor} tick={{fill: axisColor}} tickLine={false} axisLine={false} />
-                    <YAxis stroke={axisColor} tick={{fill: axisColor}} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="0" stroke={gridColor} vertical={false} />
+                    <XAxis dataKey="name" stroke={axisColor} tick={{fill: axisColor, fontWeight: 'bold'}} tickLine={true} axisLine={true} />
+                    <YAxis stroke={axisColor} tick={{fill: axisColor, fontWeight: 'bold'}} tickLine={true} axisLine={true} />
                     <Tooltip 
-                        contentStyle={{ backgroundColor: tooltipBg, border: `1px solid ${gridColor}`, color: tooltipColor, borderRadius: '8px' }} 
-                        itemStyle={{ color: tooltipColor }}
+                        contentStyle={{ backgroundColor: tooltipBg, border: `2px solid ${axisColor}`, color: tooltipColor, borderRadius: '0px', boxShadow: '4px 4px 0px 0px rgba(0,0,0,1)' }} 
+                        itemStyle={{ color: tooltipColor, fontWeight: 'bold' }}
                     />
-                    <Line type="monotone" dataKey="value" stroke="#39FF14" strokeWidth={3} dot={{r: 4, fill: '#39FF14'}} />
+                    <Line type="stepAfter" dataKey="value" stroke="rgb(var(--color-secondary))" strokeWidth={4} dot={{r: 6, fill: 'rgb(var(--color-secondary))', stroke: '#000', strokeWidth: 2}} />
                 </LineChart>
             </ResponsiveContainer>
         </div>

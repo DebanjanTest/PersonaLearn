@@ -150,10 +150,12 @@ const MnemonicGen: React.FC<{t: any}> = ({t}) => {
     const generate = async () => {
         if(!fact) return;
         setLoading(true);
+        setResult('');
         try {
             const prompt = `Create a catchy mnemonic or acronym to remember this list/fact: "${fact}".`;
-            const res = await GeminiService.polishEmail(prompt, 'ASSERTIVE'); 
-            setResult(res);
+            await GeminiService.streamText(prompt, (chunk) => {
+                setResult(chunk);
+            });
         } catch(e) { console.error(e); } finally { setLoading(false); }
     };
 
@@ -309,34 +311,43 @@ export const AspirantDashboard: React.FC<{ lang: string, activeTab?: string }> =
         return (
             <div className="space-y-8 animate-in fade-in">
                 {/* Hero Section */}
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-orange-600 to-red-700 p-8 shadow-2xl">
-                    <div className="relative z-10 flex justify-between items-end">
-                         <div className="text-white space-y-2">
-                             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+                <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                         <div className="text-black space-y-4 max-w-2xl">
+                             <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                                  <Sparkles className="w-4 h-4" />
-                                 <span className="text-xs font-medium">Eyes on the Target</span>
+                                 <span>Eyes on the Target</span>
                              </div>
-                             <h1 className="text-3xl md:text-4xl font-bold">LBSNAA is waiting for you.</h1>
-                             <p className="text-orange-100 max-w-lg">Current Affairs backlog cleared. 3 new articles on International Relations added.</p>
-                             <div className="flex gap-3 pt-4">
-                                 <Button className="bg-white text-orange-800 hover:bg-orange-50 border-0">
+                             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                                LBSNAA is <br/> waiting for you.
+                             </h1>
+                             <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                                Current Affairs backlog cleared. <br/> 3 new articles on International Relations added.
+                             </p>
+                             <div className="flex flex-wrap gap-4 pt-4">
+                                 <Button variant="secondary" size="lg">
                                     Start Daily Quiz
                                  </Button>
-                                 <Button className="bg-orange-500/30 text-white hover:bg-orange-500/40 border-0 backdrop-blur-sm">
+                                 <Button variant="danger" size="lg">
                                     Read News
                                  </Button>
                              </div>
                          </div>
-                         <div className="hidden md:block opacity-80">
-                             <Flag className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                             <Landmark className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                         <div className="hidden md:block relative">
+                             <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] -rotate-3">
+                                <Flag className="w-32 h-32 text-black" />
+                             </div>
+                             <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full rotate-12">
+                                <Landmark className="w-12 h-12 text-white" />
+                             </div>
                          </div>
                     </div>
+                    <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
                 </div>
 
                 <ExamTicker t={t} />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="space-y-8">
                         <TrendAnalyzer t={t} />
                         <ErrorLog t={t} />
                     </div>

@@ -7,72 +7,147 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-          /* Light Mode - More vibrant and distinct */
-          --color-primary: 37 99 235; /* #2563EB - Stronger Blue */
-          --color-secondary: 22 163 74; /* #16A34A - Darker Green for better contrast on light */
-          --color-background: 248 250 252; /* #F8FAFC - Slight blue tint, not pure white */
-          --color-surface: 255 255 255; /* #FFFFFF */
-          --color-text: 15 23 42; /* #0F172A - Dark slate for text */
-          --color-muted: 100 116 139; /* #64748B */
-          --color-border: 203 213 225; /* #CBD5E1 - Slightly darker border */
+          /* Playful Brutalist Palette */
+          --color-primary: 124 58 237; 
+          --color-secondary: 34 197 94;
+          --color-accent: 250 204 21;
+          --color-danger: 236 72 153;
+          --color-background: 250 204 21; /* Significant Yellow */
+          --color-surface: 255 255 255;
+          --color-text: 0 0 0;
+          --color-muted: 75 85 99;
+          --color-border: 0 0 0;
+          
+          --brutalist-shadow: 3px 3px 0px 0px #000;
+          --brutalist-shadow-lg: 6px 6px 0px 0px #000;
+          --brutalist-shadow-sm: 1px 1px 0px 0px #000;
         }
 
         .dark {
-          /* Dark Mode - Maintained original look */
-          --color-primary: 41 171 226; /* Original Neon Blue */
-          --color-secondary: 57 255 20; /* Original Neon Green */
-          --color-background: 30 30 30; /* #1E1E1E */
-          --color-surface: 42 42 42; /* #2A2A2A */
-          --color-text: 240 242 245; /* #F0F2F5 */
-          --color-muted: 161 161 170; /* #A1A1AA */
-          --color-border: 63 63 70; /* #3F3F46 */
+          --color-background: 24 24 27; /* Dark Zinc */
+          --color-surface: 39 39 42;
+          --color-text: 255 255 255;
+          --color-border: 255 255 255;
+          --brutalist-shadow: 3px 3px 0px 0px #fff;
+          --brutalist-shadow-lg: 6px 6px 0px 0px #fff;
+          --brutalist-shadow-sm: 1px 1px 0px 0px #fff;
         }
 
-        /* Persona Themes - Overrides primary color based on context */
-        .theme-student { --color-primary: 139 92 246; } /* Violet */
-        .theme-teacher { --color-primary: 16 185 129; } /* Emerald */
-        .theme-professional { --color-primary: 100 116 139; } /* Slate */
-        .theme-business { --color-primary: 245 158 11; } /* Amber */
-        .theme-interview { --color-primary: 217 70 239; } /* Fuchsia */
-        .theme-aspirant { --color-primary: 249 115 22; } /* Orange */
+        /* Persona Themes - Vibrant & High Contrast */
+        .theme-student { 
+            --color-primary: 167 139 250; /* Light Violet */
+            --color-background: 245 243 255; /* Very Light Violet */
+            --color-accent: 250 204 21; /* Yellow */
+        } 
+        .theme-teacher { 
+            --color-primary: 52 211 153; /* Emerald */
+            --color-background: 236 253 245; /* Very Light Emerald */
+            --color-accent: 236 72 153; /* Pink */
+        }
+        .theme-professional { 
+            --color-primary: 96 165 250; /* Blue */
+            --color-background: 239 246 255; /* Very Light Blue */
+            --color-accent: 34 197 94; /* Green */
+        }
+        .theme-business { 
+            --color-primary: 251 191 36; /* Amber */
+            --color-background: 255 251 235; /* Very Light Amber */
+            --color-accent: 124 58 237; /* Purple */
+        }
+        .theme-interview { 
+            --color-primary: 244 114 182; /* Pink */
+            --color-background: 253 242 248; /* Very Light Pink */
+            --color-accent: 59 130 246; /* Blue */
+        }
+        .theme-aspirant { 
+            --color-primary: 251 146 60; /* Orange */
+            --color-background: 255 247 237; /* Very Light Orange */
+            --color-accent: 34 197 94; /* Green */
+        }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Brutalist Utilities */
+        .brutalist-card {
+            border: 3px solid rgb(var(--color-border));
+            box-shadow: var(--brutalist-shadow);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
         }
-        ::-webkit-scrollbar-track {
-            background: rgb(var(--color-background));
+        .brutalist-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: var(--brutalist-shadow-lg);
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgb(var(--color-border));
-            border-radius: 4px;
+        .brutalist-button {
+            border: 3px solid rgb(var(--color-border));
+            box-shadow: var(--brutalist-shadow-sm);
+            transition: all 0.1s ease-in-out;
+            border-radius: 16px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgb(var(--color-primary));
+        .brutalist-button:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px 0px transparent;
         }
+
+        .dotted-bg {
+            background-image: radial-gradient(rgb(var(--color-border) / 0.15) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        /* Wavy Divider */
+        .wavy-divider {
+            position: relative;
+            height: 30px;
+            width: 100%;
+            background: transparent;
+        }
+        .wavy-divider::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23ffffff'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 3px solid rgb(var(--color-border));
+            background: rgb(var(--color-danger));
+            color: white;
+            font-weight: 900;
+            padding: 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .ticker {
+            display: inline-block;
+            animation: ticker 40s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 3rem;
+        }
+
         body {
             background-color: rgb(var(--color-background));
+            background-image: radial-gradient(rgb(var(--color-border) / 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: rgb(var(--color-text));
-            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            transition: background-color 0.5s ease;
+            min-height: 100vh;
         }
 
-        @keyframes float {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(10px, 20px); }
-          100% { transform: translate(0, 0); }
-        }
-        @keyframes float-delayed {
-          0% { transform: translate(0, 0); }
-          50% { transform: translate(-15px, 15px); }
-          100% { transform: translate(0, 0); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
-        }
+        .font-black { font-weight: 900; }
     </style>
     <script>
       tailwind.config = {
@@ -119,8 +194,10 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

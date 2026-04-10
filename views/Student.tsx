@@ -294,80 +294,89 @@ export const StudentDashboard: React.FC<StudentViewProps> = ({ lang, theme = 'da
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-violet-600 to-indigo-800 p-8 shadow-2xl">
-                <div className="relative z-10 flex justify-between items-end">
-                     <div className="text-white space-y-2">
-                         <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+            <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                     <div className="text-black space-y-4 max-w-2xl">
+                         <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                              <Sparkles className="w-4 h-4" />
-                             <span className="text-xs font-medium">Keep Learning</span>
+                             <span>{t.keepLearning || 'Keep Learning'}</span>
                          </div>
-                         <h1 className="text-3xl md:text-4xl font-bold">Ready to conquer your goals?</h1>
-                         <p className="text-violet-100 max-w-lg">You're on a {stats.streak}-day streak! Your next Physics exam is approaching.</p>
-                         <div className="flex gap-3 pt-4">
-                             <Button onClick={() => onNavigate?.('materials')} className="bg-white text-violet-800 hover:bg-violet-50 border-0">
-                                <Upload className="w-4 h-4 mr-2" /> Upload Notes
+                         <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                            Ready to conquer <br/> your goals?
+                         </h1>
+                         <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                            You're on a {stats.streak}-day streak! <br/> Your next Physics exam is approaching.
+                         </p>
+                         <div className="flex flex-wrap gap-4 pt-4">
+                             <Button onClick={() => onNavigate?.('materials')} variant="secondary" size="lg">
+                                <Upload className="w-5 h-5 mr-2" /> Upload Notes
                              </Button>
-                             <Button onClick={() => onNavigate?.('exams')} className="bg-violet-500/30 text-white hover:bg-violet-500/40 border-0 backdrop-blur-sm">
+                             <Button onClick={() => onNavigate?.('exams')} variant="danger" size="lg">
                                 Take Exam
                              </Button>
                          </div>
                      </div>
-                     <div className="hidden md:block opacity-80">
-                         <Trophy className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                         <GraduationCap className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                     <div className="hidden md:block relative">
+                         <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] rotate-3">
+                            <GraduationCap className="w-32 h-32 text-black" />
+                         </div>
+                         <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full -rotate-12">
+                            <Trophy className="w-12 h-12 text-white" />
+                         </div>
                      </div>
                 </div>
+                <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
             </div>
 
             {/* Top Stats Row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200 border-l-4 border-l-orange-500">
-                    <div className="p-3 bg-orange-500/10 text-orange-500 rounded-xl">
-                        <Flame className="w-6 h-6" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="flex items-center gap-6 bg-white">
+                    <div className="p-4 bg-accent border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                        <Flame className="w-8 h-8 text-black" />
                     </div>
                     <div>
-                        <p className="text-sm text-muted">{t.studyStreak}</p>
-                        <h3 className="text-2xl font-bold text-text">{stats.streak} {t.days}</h3>
+                        <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.studyStreak}</p>
+                        <h3 className="text-3xl font-black text-black">{stats.streak} {t.days}</h3>
                     </div>
                 </Card>
-                <Card className="flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200 border-l-4 border-l-blue-500">
-                    <div className="p-3 bg-blue-500/10 text-blue-500 rounded-xl">
-                        <Target className="w-6 h-6" />
+                <Card className="flex items-center gap-6 bg-white">
+                    <div className="p-4 bg-primary border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                        <Target className="w-8 h-8 text-black" />
                     </div>
                     <div>
-                        <p className="text-sm text-muted">{t.weeklyGoal}</p>
-                        <h3 className="text-2xl font-bold text-text">{stats.weeklyGoal}%</h3>
+                        <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.weeklyGoal}</p>
+                        <h3 className="text-3xl font-black text-black">{stats.weeklyGoal}%</h3>
                     </div>
                 </Card>
-                <Card className="flex items-center gap-4 hover:scale-[1.02] transition-transform duration-200 border-l-4 border-l-purple-500">
-                    <div className="p-3 bg-purple-500/10 text-purple-500 rounded-xl">
-                        <Book className="w-6 h-6" />
+                <Card className="flex items-center gap-6 bg-white">
+                    <div className="p-4 bg-secondary border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                        <Book className="w-8 h-8 text-black" />
                     </div>
                     <div>
-                        <p className="text-sm text-muted">{t.materials}</p>
-                        <h3 className="text-2xl font-bold text-text">{stats.materialsCount}</h3>
+                        <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.materials}</p>
+                        <h3 className="text-3xl font-black text-black">{stats.materialsCount}</h3>
                     </div>
                 </Card>
             </div>
 
             {/* Quick Access / Main Navigation */}
             <div>
-                <h2 className="text-lg font-semibold text-text mb-4 flex items-center gap-2">
-                    <LayoutIcon className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-black text-black mb-6 uppercase tracking-tight flex items-center gap-3">
+                    <LayoutIcon className="w-8 h-8 text-primary" />
                     {t.quickActions || "Study Hub"}
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {navCards.map((item) => (
                         <button 
                             key={item.id} 
                             onClick={() => onNavigate?.(item.id)} 
-                            className={`group p-5 bg-surface border border-border rounded-xl text-left transition-all hover:shadow-lg ${item.border}`}
+                            className={`group p-8 bg-white border-[3px] border-black rounded-[32px] text-left transition-all hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]`}
                         >
-                            <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${item.bg}`}>
-                                <item.icon className={`w-6 h-6 ${item.color}`} />
+                            <div className={`w-16 h-16 rounded-2xl border-[3px] border-black flex items-center justify-center mb-6 transition-transform group-hover:scale-110 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${item.bg}`}>
+                                <item.icon className={`w-8 h-8 ${item.color}`} />
                             </div>
-                            <h3 className="font-bold text-lg text-text mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
-                            <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+                            <h3 className="font-black text-xl text-black mb-3 uppercase tracking-tight group-hover:text-primary transition-colors">{item.title}</h3>
+                            <p className="text-sm font-medium text-muted leading-relaxed">{item.desc}</p>
                         </button>
                     ))}
                 </div>
@@ -543,7 +552,11 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
             }
 
             let res;
-            if (activeTool === 'SUMMARY') res = await GeminiService.summarize(inputText, fileData);
+            if (activeTool === 'SUMMARY') {
+                res = await GeminiService.summarize(inputText, (chunk) => {
+                    setResult(chunk);
+                }, fileData);
+            }
             if (activeTool === 'FLASHCARD') res = await GeminiService.generateFlashcards(inputText, fileData);
             if (activeTool === 'QA') {
                 const config: QAConfig = {
@@ -701,10 +714,10 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                                         const key = type.id as keyof typeof qaSettings;
                                         const setting = qaSettings[key];
                                         return (
-                                            <div key={key} className="flex items-center justify-between p-2 border border-border rounded bg-surface/50">
+                                            <div key={String(key)} className="flex items-center justify-between p-2 border border-border rounded bg-surface/50">
                                                 <div className="flex items-center gap-2">
-                                                    <input type="checkbox" id={`check-${key}`} checked={setting.enabled} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], enabled: e.target.checked }}))} className="w-4 h-4 rounded text-primary focus:ring-primary" />
-                                                    <label htmlFor={`check-${key}`} className="text-sm text-text cursor-pointer select-none">{type.label} ({type.marks})</label>
+                                                    <input type="checkbox" id={`check-${String(key)}`} checked={setting.enabled} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], enabled: e.target.checked }}))} className="w-4 h-4 rounded text-primary focus:ring-primary" />
+                                                    <label htmlFor={`check-${String(key)}`} className="text-sm text-text cursor-pointer select-none">{type.label} ({type.marks})</label>
                                                 </div>
                                                 {setting.enabled && <input type="number" min="1" max="20" value={setting.count} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], count: parseInt(e.target.value) || 1 }}))} className="w-12 px-1 py-1 text-xs border border-border rounded bg-background text-text text-center focus:outline-none focus:border-primary" />}
                                             </div>

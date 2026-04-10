@@ -462,41 +462,65 @@ export const TeacherDashboard: React.FC<TeacherViewProps> = ({ lang, activeTab, 
             default: return (
                 <div className="space-y-8 animate-in fade-in">
                     {/* Hero Section */}
-                    <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-800 p-8 shadow-2xl">
-                        <div className="relative z-10 flex justify-between items-end">
-                             <div className="text-white space-y-2">
-                                 <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+                    <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                             <div className="text-black space-y-4 max-w-2xl">
+                                 <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                                      <Sparkles className="w-4 h-4" />
-                                     <span className="text-xs font-medium">Good Morning, Professor</span>
+                                     <span>Good Morning, Professor</span>
                                  </div>
-                                 <h1 className="text-3xl md:text-4xl font-bold">Ready to inspire today?</h1>
-                                 <p className="text-emerald-100 max-w-lg">You have 2 classes and 1 staff meeting scheduled. Your recent physics exam paper has been generated.</p>
-                                 <div className="flex gap-3 pt-4">
-                                     <Button onClick={() => handleNavigate('CLASSROOM')} className="bg-white text-emerald-800 hover:bg-emerald-50 border-0">Start Attendance</Button>
-                                     <Button onClick={() => handleNavigate('EXAM_CREATOR')} className="bg-emerald-500/30 text-white hover:bg-emerald-500/40 border-0 backdrop-blur-sm">Create Exam</Button>
+                                 <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                                    Ready to inspire <br/> today?
+                                 </h1>
+                                 <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                                    You have 2 classes and 1 staff meeting scheduled. <br/> Your recent physics exam paper has been generated.
+                                 </p>
+                                 <div className="flex flex-wrap gap-4 pt-4">
+                                     <Button onClick={() => handleNavigate('CLASSROOM')} variant="secondary" size="lg">Start Attendance</Button>
+                                     <Button onClick={() => handleNavigate('EXAM_CREATOR')} variant="danger" size="lg">Create Exam</Button>
                                  </div>
                              </div>
-                             <div className="hidden md:block opacity-80">
-                                 <GraduationCap className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                                 <BookOpen className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                             <div className="hidden md:block relative">
+                                 <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] -rotate-3">
+                                    <GraduationCap className="w-32 h-32 text-black" />
+                                 </div>
+                                 <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full rotate-12">
+                                    <BookOpen className="w-12 h-12 text-white" />
+                                 </div>
                              </div>
                         </div>
+                        <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Stats Cards */}
-                        <div className="space-y-4 lg:col-span-1">
-                             <Card className="flex items-center gap-4 border-l-4 border-l-blue-500 hover:scale-[1.02] transition-transform">
-                                 <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full"><Users className="w-6 h-6 text-blue-600 dark:text-blue-400" /></div>
-                                 <div><p className="text-sm text-muted">Total Students</p><h3 className="text-2xl font-bold">142</h3></div>
+                        <div className="space-y-6 lg:col-span-1">
+                             <Card className="flex items-center gap-6 bg-white">
+                                 <div className="p-4 bg-blue-400 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                                    <Users className="w-8 h-8 text-black" />
+                                 </div>
+                                 <div>
+                                    <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">Total Students</p>
+                                    <h3 className="text-3xl font-black text-black">142</h3>
+                                 </div>
                              </Card>
-                             <Card className="flex items-center gap-4 border-l-4 border-l-purple-500 hover:scale-[1.02] transition-transform">
-                                 <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full"><FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" /></div>
-                                 <div><p className="text-sm text-muted">Papers Created</p><h3 className="text-2xl font-bold">28</h3></div>
+                             <Card className="flex items-center gap-6 bg-white">
+                                 <div className="p-4 bg-purple-400 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                                    <FileText className="w-8 h-8 text-black" />
+                                 </div>
+                                 <div>
+                                    <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">Papers Created</p>
+                                    <h3 className="text-3xl font-black text-black">28</h3>
+                                 </div>
                              </Card>
-                             <Card className="flex items-center gap-4 border-l-4 border-l-orange-500 hover:scale-[1.02] transition-transform">
-                                 <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-full"><Calendar className="w-6 h-6 text-orange-600 dark:text-orange-400" /></div>
-                                 <div><p className="text-sm text-muted">Pending Reviews</p><h3 className="text-2xl font-bold">3</h3></div>
+                             <Card className="flex items-center gap-6 bg-white">
+                                 <div className="p-4 bg-orange-400 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+                                    <Calendar className="w-8 h-8 text-black" />
+                                 </div>
+                                 <div>
+                                    <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">Pending Reviews</p>
+                                    <h3 className="text-3xl font-black text-black">3</h3>
+                                 </div>
                              </Card>
                         </div>
 
@@ -592,11 +616,11 @@ export const TeacherDashboard: React.FC<TeacherViewProps> = ({ lang, activeTab, 
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap gap-2 border-b border-border pb-1">
-                <button onClick={() => handleNavigate('dashboard')} className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-all border-b-2 ${tab === 'dashboard' ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}><BarChart3 className="w-4 h-4" /> Dashboard</button>
-                <button onClick={() => handleNavigate('EXAM_CREATOR')} className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-all border-b-2 ${tab === 'EXAM_CREATOR' ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}><FileText className="w-4 h-4" /> Exam Creator</button>
-                <button onClick={() => handleNavigate('CLASSROOM')} className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-all border-b-2 ${tab === 'CLASSROOM' ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}><Users className="w-4 h-4" /> Classroom</button>
-                <button onClick={() => handleNavigate('PERFORMANCE')} className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-all border-b-2 ${tab === 'PERFORMANCE' ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}><TrendingUp className="w-4 h-4" /> Performance</button>
+            <div className="flex flex-wrap gap-4 border-b-[4px] border-black pb-4 mb-8">
+                <button onClick={() => handleNavigate('dashboard')} className={`flex items-center gap-3 px-6 py-3 border-[3px] border-black font-black uppercase text-sm tracking-widest transition-all rounded-2xl ${tab === 'dashboard' ? 'bg-primary text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] translate-x-[-3px] translate-y-[-3px]' : 'bg-white text-black hover:bg-accent/20'}`}><BarChart3 className="w-5 h-5" /> Dashboard</button>
+                <button onClick={() => handleNavigate('EXAM_CREATOR')} className={`flex items-center gap-3 px-6 py-3 border-[3px] border-black font-black uppercase text-sm tracking-widest transition-all rounded-2xl ${tab === 'EXAM_CREATOR' ? 'bg-primary text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] translate-x-[-3px] translate-y-[-3px]' : 'bg-white text-black hover:bg-accent/20'}`}><FileText className="w-5 h-5" /> Exam Creator</button>
+                <button onClick={() => handleNavigate('CLASSROOM')} className={`flex items-center gap-3 px-6 py-3 border-[3px] border-black font-black uppercase text-sm tracking-widest transition-all rounded-2xl ${tab === 'CLASSROOM' ? 'bg-primary text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] translate-x-[-3px] translate-y-[-3px]' : 'bg-white text-black hover:bg-accent/20'}`}><Users className="w-5 h-5" /> Classroom</button>
+                <button onClick={() => handleNavigate('PERFORMANCE')} className={`flex items-center gap-3 px-6 py-3 border-[3px] border-black font-black uppercase text-sm tracking-widest transition-all rounded-2xl ${tab === 'PERFORMANCE' ? 'bg-primary text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] translate-x-[-3px] translate-y-[-3px]' : 'bg-white text-black hover:bg-accent/20'}`}><TrendingUp className="w-5 h-5" /> Performance</button>
             </div>
             <div className="min-h-[600px]">{renderContent()}</div>
         </div>

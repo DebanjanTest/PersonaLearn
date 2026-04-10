@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 export type Persona = 'STUDENT' | 'TEACHER' | 'PROFESSIONAL' | 'INTERVIEW' | 'ASPIRANT' | 'BUSINESS';
 
 export interface User {

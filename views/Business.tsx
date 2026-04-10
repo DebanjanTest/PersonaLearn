@@ -306,49 +306,58 @@ export const BusinessDashboard: React.FC<{ lang: string, activeTab?: string }> =
     const tab = activeTab || 'dashboard';
 
     return (
-        <div className="space-y-6 animate-in fade-in">
+        <div className="space-y-8 animate-in fade-in">
              {tab === 'pitch' ? (
                 <PitchDeckGenerator t={t} />
              ) : (
                 <div className="space-y-8">
                     {/* Hero Section */}
-                    <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-amber-600 to-orange-700 p-8 shadow-2xl">
-                        <div className="relative z-10 flex justify-between items-end">
-                             <div className="text-white space-y-2">
-                                 <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit">
+                    <div className="relative brutalist-card bg-primary p-10 overflow-hidden">
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                             <div className="text-black space-y-4 max-w-2xl">
+                                 <div className="flex items-center gap-2 bg-black text-white px-4 py-1.5 border-[3px] border-black font-black text-xs uppercase tracking-widest w-fit rounded-full">
                                      <Sparkles className="w-4 h-4" />
-                                     <span className="text-xs font-medium">Empire Building Mode</span>
+                                     <span>Empire Building Mode</span>
                                  </div>
-                                 <h1 className="text-3xl md:text-4xl font-bold">What's the next big move?</h1>
-                                 <p className="text-amber-100 max-w-lg">Market trends are favoring your sector. Review customer feedback and adjust pricing.</p>
-                                 <div className="flex gap-3 pt-4">
-                                     <Button className="bg-white text-amber-800 hover:bg-amber-50 border-0">
+                                 <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                                    What's the <br/> next big move?
+                                 </h1>
+                                 <p className="text-lg font-black uppercase opacity-80 leading-tight">
+                                    Market trends are favoring your sector. <br/> Review customer feedback and adjust pricing.
+                                 </p>
+                                 <div className="flex flex-wrap gap-4 pt-4">
+                                     <Button variant="secondary" size="lg">
                                         <Target className="w-4 h-4 mr-2" /> New Strategy
                                      </Button>
-                                     <Button className="bg-amber-500/30 text-white hover:bg-amber-500/40 border-0 backdrop-blur-sm">
+                                     <Button variant="danger" size="lg">
                                         Check Trends
                                      </Button>
                                  </div>
                              </div>
-                             <div className="hidden md:block opacity-80">
-                                 <Rocket className="w-48 h-48 text-white/10 absolute -bottom-10 -right-10" />
-                                 <LineChart className="w-32 h-32 text-white/10 absolute top-10 right-20" />
+                             <div className="hidden md:block relative">
+                                 <div className="w-64 h-64 bg-accent border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-[40px] -rotate-3">
+                                    <Rocket className="w-32 h-32 text-black" />
+                                 </div>
+                                 <div className="absolute -top-6 -right-6 w-24 h-24 bg-danger border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rounded-full rotate-12">
+                                    <LineChart className="w-12 h-12 text-white" />
+                                 </div>
                              </div>
                         </div>
+                        <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dotted-bg"></div>
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         <StrategyAnalyzer t={t} />
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="space-y-8">
                                 <BrandKitGenerator t={t} />
                                 <InventoryForecaster t={t} />
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-8">
                                 <ReviewResponder t={t} />
                                 <LegalTemplates t={t} />
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-8">
                                 <CompetitorSpy t={t} />
                                 <CashFlowVisualizer t={t} />
                             </div>
