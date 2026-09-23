@@ -20,7 +20,7 @@ const formatError = (context: string, err: any): Error => {
     return new Error(`${context}: ${message}`);
 };
 
-const MODEL_NAME = 'gemini-2.0-flash';
+const MODEL_NAME = 'gemini-3.6-flash';
 
 // Helper to safely parse JSON from AI response
 const safeJSONParse = (text: string, fallback: any) => {
