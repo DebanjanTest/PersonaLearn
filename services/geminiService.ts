@@ -1,11 +1,23 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
+const getApiKey = (): string => {
+    const key = (typeof process !== 'undefined' && (process.env.GEMINI_API_KEY || process.env.API_KEY)) ||
+                (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_API_KEY)) ||
+                (typeof window !== 'undefined' && window.localStorage && (localStorage.getItem('GEMINI_API_KEY') || localStorage.getItem('VITE_GEMINI_API_KEY')));
+    return key || '';
+};
+
 const getAI = () => {
-    const apiKey = process.env.GEMINI_API_KEY; 
+    const apiKey = getApiKey(); 
     if (!apiKey) {
-        console.warn("GEMINI_API_KEY is missing from environment variables.");
+        throw new Error("Missing Gemini API Key. Please set GEMINI_API_KEY or VITE_GEMINI_API_KEY in your environment variables.");
     }
-    return new GoogleGenAI({ apiKey: apiKey || 'dummy-key-to-prevent-crash' });
+    return new GoogleGenAI({ apiKey });
+};
+
+const formatError = (context: string, err: any): Error => {
+    const message = err?.message || (typeof err === 'string' ? err : 'Unknown error');
+    return new Error(`${context}: ${message}`);
 };
 
 const MODEL_NAME = 'gemini-2.0-flash';
@@ -82,7 +94,7 @@ export const GeminiService = {
           return safeJSONParse(response.text || '{}', {});
       } catch (e) {
           console.error("Structured JSON Generation Error:", e);
-          throw new Error("Failed to generate structured data.");
+          throw formatError("Failed to generate structured data", e);
       }
   },
 
@@ -106,7 +118,7 @@ export const GeminiService = {
         return result;
     } catch (e) {
         console.error("Gemini Summarize Error:", e);
-        throw new Error("Failed to generate summary. Please check your connection.");
+        throw formatError("Failed to generate summary", e);
     }
   },
 
@@ -127,7 +139,7 @@ export const GeminiService = {
           return result;
       } catch (e) {
           console.error("Chat Error:", e);
-          throw new Error("Chat service unavailable.");
+          throw formatError("Chat service unavailable", e);
       }
   },
 
@@ -159,7 +171,7 @@ export const GeminiService = {
         return result;
      } catch (e) {
          console.error("Corporate Summarize Error:", e);
-         throw new Error("Analysis failed.");
+         throw formatError("Analysis failed", e);
      }
   },
 
@@ -177,7 +189,7 @@ export const GeminiService = {
         return response.text || "No feedback generated.";
       } catch (e) {
           console.error("Code Review Error:", e);
-          throw new Error("Code review failed.");
+          throw formatError("Code review failed", e);
       }
   },
 
@@ -193,7 +205,7 @@ export const GeminiService = {
         return fullText;
       } catch (e) {
           console.error("Stream Text Error:", e);
-          throw new Error("Failed to stream text.");
+          throw formatError("Failed to stream text", e);
       }
   },
 
@@ -207,7 +219,7 @@ export const GeminiService = {
         return response.text || "Could not polish text.";
       } catch (e) {
           console.error("Email Polish Error:", e);
-          throw new Error("Text polishing failed.");
+          throw formatError("Text polishing failed", e);
       }
   },
 
@@ -227,7 +239,7 @@ export const GeminiService = {
           return safeJSONParse(response.text || '{}', {});
       } catch (e) {
           console.error("Business Analysis Error:", e);
-          throw new Error("Analysis failed.");
+          throw formatError("Business analysis failed", e);
       }
   },
 
@@ -260,7 +272,7 @@ export const GeminiService = {
           return safeJSONParse(response.text || '[]', []);
       } catch (e) {
           console.error("Pitch Deck Error:", e);
-          throw new Error("Failed to generate pitch deck.");
+          throw formatError("Failed to generate pitch deck", e);
       }
   },
 
@@ -300,7 +312,7 @@ export const GeminiService = {
         return safeJSONParse(response.text || '[]', []);
     } catch (e) {
         console.error("Quiz Gen Error:", e);
-        throw new Error("Failed to generate quiz.");
+        throw formatError("Failed to generate quiz", e);
     }
   },
 
@@ -381,7 +393,7 @@ export const GeminiService = {
         return json.flashcards || [];
     } catch (e) {
         console.error("Gemini Flashcard Error:", e);
-        throw new Error("Failed to generate flashcards.");
+        throw formatError("Failed to generate flashcards", e);
     }
   },
 
@@ -491,7 +503,7 @@ export const GeminiService = {
         return safeJSONParse(response.text || '{}', {});
     } catch (e) {
          console.error("Gemini QA Error:", e);
-         throw new Error("Failed to generate Q&A.");
+         throw formatError("Failed to generate Q&A", e);
     }
   },
 
@@ -524,7 +536,7 @@ export const GeminiService = {
         return text;
     } catch (e) {
          console.error("Gemini Mindmap Error:", e);
-         throw new Error("Failed to generate Mind Map.");
+         throw formatError("Failed to generate Mind Map", e);
     }
   },
 
@@ -611,7 +623,7 @@ export const GeminiService = {
         return safeJSONParse(response.text || '{}', null);
      } catch (e) {
          console.error("Gemini Paper Gen Error:", e);
-         throw new Error("Failed to generate question paper.");
+         throw formatError("Failed to generate question paper", e);
      }
   },
 
@@ -664,7 +676,7 @@ export const GeminiService = {
         return safeJSONParse(response.text || '{}', {});
     } catch (e) {
         console.error("Gemini Evaluation Error:", e);
-        throw new Error("Failed to evaluate exam.");
+        throw formatError("Failed to evaluate exam", e);
     }
   },
 
@@ -785,7 +797,7 @@ export const GeminiService = {
           return safeJSONParse(response.text || '{}', {});
       } catch (e) {
           console.error("Resume Analysis Error:", e);
-          throw new Error("Analysis failed.");
+          throw formatError("Resume analysis failed", e);
       }
   },
 };

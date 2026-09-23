@@ -175,8 +175,8 @@ const AdvancedExamCreator: React.FC<{ lang: string }> = ({ lang }) => {
             );
             setResult(res);
             addToast("Paper Generated Successfully", "success");
-        } catch (e) {
-            addToast("Failed to generate paper", "error");
+        } catch (e: any) {
+            addToast(e?.message || "Failed to generate paper", "error");
         } finally {
             setLoading(false);
         }
