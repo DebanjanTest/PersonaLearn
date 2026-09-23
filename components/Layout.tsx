@@ -120,16 +120,16 @@ const Layout: React.FC<LayoutProps> = ({
   const PersonaButton = ({ p, label, icon: Icon, colorClass }: any) => (
       <button 
           onClick={() => handleMobileClick(() => onSwitchPersona(p))} 
-          className={`w-full flex items-center gap-2 px-2 py-1.5 border-2 border-border font-black uppercase text-xs tracking-tight transition-all rounded-lg ${currentPersona === p ? `${colorClass} text-slate-950 shadow-[var(--brutalist-shadow-sm)] translate-x-[-1px] translate-y-[-1px]` : 'bg-surface text-slate-900 dark:text-white hover:bg-accent/20'}`}
+          className={`flex flex-col items-center justify-center text-center p-2 sm:p-2.5 gap-1.5 border-[2px] border-border font-black uppercase text-[10px] sm:text-[11px] tracking-tight transition-all rounded-xl ${currentPersona === p ? `${colorClass} text-zinc-950 shadow-[var(--brutalist-shadow-sm)] translate-x-[-1px] translate-y-[-1px]` : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700'}`}
           title={label}
       >
           <Icon className="w-4 h-4 shrink-0" />
-          <span className="whitespace-normal leading-tight text-left">{label}</span>
+          <span className="leading-tight select-none whitespace-normal text-center">{label}</span>
       </button>
   );
 
   return (
-    <div className={`flex h-screen overflow-hidden bg-background text-text font-sans transition-colors duration-500 ${getThemeClass()}`}>
+    <div className={`flex h-screen overflow-hidden bg-zinc-100 dark:bg-zinc-950 text-text font-sans transition-colors duration-500 ${getThemeClass()}`}>
       
       {sidebarOpen && (
         <div 
@@ -140,38 +140,38 @@ const Layout: React.FC<LayoutProps> = ({
 
       <aside 
         style={{ width: sidebarOpen ? '100%' : `${sidebarWidth}px` }}
-        className={`fixed inset-y-0 left-0 z-50 bg-surface border-r-[4px] border-border transition-transform duration-500 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-[var(--brutalist-shadow)]`}
+        className={`fixed inset-y-0 left-0 z-50 bg-white dark:bg-zinc-900 border-r-[4px] border-border transition-transform duration-500 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-[var(--brutalist-shadow)]`}
       >
-        <div className="h-16 flex items-center px-5 border-b-[4px] border-border bg-surface">
+        <div className="h-16 flex items-center px-5 border-b-[4px] border-border bg-white dark:bg-zinc-900">
           <button onClick={onLogoClick} className="flex items-center group focus:outline-none">
             <div className="bg-danger text-white px-2 py-0.5 border-[3px] border-border font-black text-lg shadow-[var(--brutalist-shadow-sm)] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] transition-transform rounded-xl">
                 P
             </div>
-            <span className="ml-2.5 text-lg font-black uppercase tracking-tighter text-text">PersonaLearn</span>
+            <span className="ml-2.5 text-lg font-black uppercase tracking-tighter text-zinc-900 dark:text-zinc-100">PersonaLearn</span>
           </button>
-          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-text hover:scale-125 transition-transform">
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-zinc-900 dark:text-zinc-100 hover:scale-125 transition-transform">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-2 bg-surface dotted-bg">
+        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-2 bg-white dark:bg-zinc-900 dotted-bg">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleMobileClick(() => onNavigate(item.id))}
-              className={`w-full flex items-center px-4 py-2 border-[3px] border-border font-black uppercase text-[11px] tracking-widest transition-all rounded-xl ${currentView === item.id ? 'bg-primary text-black shadow-[var(--brutalist-shadow-sm)] translate-x-[-2px] translate-y-[-2px]' : 'bg-surface text-text hover:bg-accent/20'}`}
+              className={`w-full flex items-center px-4 py-2.5 border-[3px] border-border font-black uppercase text-[11px] tracking-widest transition-all rounded-xl ${currentView === item.id ? 'bg-primary text-zinc-950 shadow-[var(--brutalist-shadow-sm)] translate-x-[-2px] translate-y-[-2px]' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700'}`}
             >
-              <item.icon className={`w-4.5 h-4.5 mr-2.5 ${currentView === item.id ? 'text-black' : 'text-text'}`} />
+              <item.icon className={`w-4.5 h-4.5 mr-2.5 ${currentView === item.id ? 'text-zinc-950' : 'text-zinc-900 dark:text-zinc-100'}`} />
               {sidebarWidth > 180 && <span className="truncate">{item.name}</span>}
             </button>
           ))}
         </div>
 
-        <div className="p-4 border-t-[4px] border-border space-y-3 bg-surface">
+        <div className="p-4 border-t-[4px] border-border space-y-3 bg-white dark:bg-zinc-900">
              {sidebarWidth > 200 && (
                  <div className="p-3 bg-accent/10 border-[3px] border-border shadow-[var(--brutalist-shadow-sm)] rounded-xl">
-                    <p className="text-[10px] text-slate-900 dark:text-white mb-2 font-black uppercase tracking-[0.15em]">{t.switchRole || 'SWITCH ROLE'}</p>
-                    <div className="grid grid-cols-2 gap-1.5">
+                    <p className="text-[10px] text-zinc-900 dark:text-zinc-100 mb-2 font-black uppercase tracking-[0.15em]">{t.switchRole || 'SWITCH ROLE'}</p>
+                    <div className="grid grid-cols-2 gap-2">
                         <PersonaButton p="STUDENT" label="Student" icon={GraduationCap} colorClass="bg-violet-400" />
                         <PersonaButton p="TEACHER" label="Teacher" icon={BookOpen} colorClass="bg-emerald-400" />
                         <PersonaButton p="PROFESSIONAL" label="Professional" icon={Briefcase} colorClass="bg-blue-400" />
@@ -182,7 +182,7 @@ const Layout: React.FC<LayoutProps> = ({
                 </div>
              )}
 
-            <Button variant="ghost" className="w-full justify-start border-[3px] border-border bg-surface text-text shadow-[var(--brutalist-shadow-sm)] rounded-xl" onClick={() => handleMobileClick(() => setSettingsOpen(true))}>
+            <Button variant="ghost" className="w-full justify-start border-[3px] border-border bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-[var(--brutalist-shadow-sm)] rounded-xl" onClick={() => handleMobileClick(() => setSettingsOpen(true))}>
                 <Settings className="w-4 h-4 mr-2" />
                 {sidebarWidth > 180 && <span className="text-[11px]">{t.settings || 'Settings'}</span>}
             </Button>
@@ -196,16 +196,16 @@ const Layout: React.FC<LayoutProps> = ({
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        <header className="lg:hidden flex items-center h-14 px-5 bg-surface border-b-[4px] border-border z-20 relative">
-            <button onClick={() => setSidebarOpen(true)} className="text-text p-2 hover:scale-125 transition-transform">
+        <header className="lg:hidden flex items-center h-14 px-5 bg-white dark:bg-zinc-900 border-b-[4px] border-border z-20 relative">
+            <button onClick={() => setSidebarOpen(true)} className="text-zinc-900 dark:text-zinc-100 p-2 hover:scale-125 transition-transform">
                 <Menu className="w-6 h-6" />
             </button>
-            <button onClick={onLogoClick} className="ml-2.5 font-black uppercase text-text text-lg tracking-tighter">
+            <button onClick={onLogoClick} className="ml-2.5 font-black uppercase text-zinc-900 dark:text-zinc-100 text-lg tracking-tighter">
                 PersonaLearn
             </button>
         </header>
 
-        <main className="flex-1 overflow-y-auto relative bg-background transition-colors duration-500">
+        <main className="flex-1 overflow-y-auto relative bg-zinc-100 dark:bg-zinc-950 transition-colors duration-500">
             <div className="relative z-10 max-w-7xl mx-auto p-3 md:p-6 lg:p-8 pb-20">
                 {children}
             </div>
@@ -247,13 +247,13 @@ const Layout: React.FC<LayoutProps> = ({
                   <div className="grid grid-cols-2 gap-3 mt-2">
                       <button 
                         onClick={() => theme === 'dark' && toggleTheme()}
-                        className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${theme === 'light' ? 'bg-primary/10 border-primary text-primary shadow-sm ring-1 ring-primary' : 'bg-background border-border text-muted hover:bg-black/5 dark:hover:bg-white/5'}`}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border-[2px] border-border font-black text-xs uppercase tracking-wider transition-all ${theme === 'light' ? 'bg-primary text-zinc-950 shadow-[var(--brutalist-shadow-sm)]' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white'}`}
                       >
                           <Sun className="w-4 h-4" /> Light
                       </button>
                       <button 
                         onClick={() => theme === 'light' && toggleTheme()}
-                        className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${theme === 'dark' ? 'bg-primary/10 border-primary text-primary shadow-sm ring-1 ring-primary' : 'bg-background border-border text-muted hover:bg-black/5 dark:hover:bg-white/5'}`}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border-[2px] border-border font-black text-xs uppercase tracking-wider transition-all ${theme === 'dark' ? 'bg-primary text-zinc-950 shadow-[var(--brutalist-shadow-sm)]' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white'}`}
                       >
                           <Moon className="w-4 h-4" /> Dark
                       </button>

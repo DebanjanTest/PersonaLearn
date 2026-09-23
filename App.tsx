@@ -92,7 +92,7 @@ const App: React.FC = () => {
 
   return (
     <ToastContext.Provider value={{ addToast }}>
-        <div className="min-h-screen bg-background text-text">
+        <div className="min-h-screen bg-zinc-100 dark:bg-zinc-950 text-text transition-colors duration-300">
         <Layout 
             currentPersona={currentPersona} 
             onSwitchPersona={handlePersonaSwitch}

@@ -330,38 +330,38 @@ export const StudentDashboard: React.FC<StudentViewProps> = ({ lang, theme = 'da
 
             {/* Top Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="flex items-center gap-6 bg-white">
+                <Card className="flex items-center gap-6 bg-white dark:bg-zinc-900">
                     <div className="p-4 bg-accent border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
                         <Flame className="w-8 h-8 text-black" />
                     </div>
                     <div>
                         <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.studyStreak}</p>
-                        <h3 className="text-3xl font-black text-black">{stats.streak} {t.days}</h3>
+                        <h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100">{stats.streak} {t.days}</h3>
                     </div>
                 </Card>
-                <Card className="flex items-center gap-6 bg-white">
+                <Card className="flex items-center gap-6 bg-white dark:bg-zinc-900">
                     <div className="p-4 bg-primary border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
                         <Target className="w-8 h-8 text-black" />
                     </div>
                     <div>
                         <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.weeklyGoal}</p>
-                        <h3 className="text-3xl font-black text-black">{stats.weeklyGoal}%</h3>
+                        <h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100">{stats.weeklyGoal}%</h3>
                     </div>
                 </Card>
-                <Card className="flex items-center gap-6 bg-white">
+                <Card className="flex items-center gap-6 bg-white dark:bg-zinc-900">
                     <div className="p-4 bg-secondary border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
                         <Book className="w-8 h-8 text-black" />
                     </div>
                     <div>
                         <p className="text-xs font-black uppercase tracking-widest text-muted mb-1">{t.materials}</p>
-                        <h3 className="text-3xl font-black text-black">{stats.materialsCount}</h3>
+                        <h3 className="text-3xl font-black text-zinc-900 dark:text-zinc-100">{stats.materialsCount}</h3>
                     </div>
                 </Card>
             </div>
 
             {/* Quick Access / Main Navigation */}
             <div>
-                <h2 className="text-2xl font-black text-black mb-6 uppercase tracking-tight flex items-center gap-3">
+                <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mb-6 uppercase tracking-tight flex items-center gap-3">
                     <LayoutIcon className="w-8 h-8 text-primary" />
                     {t.quickActions || "Study Hub"}
                 </h2>
@@ -370,13 +370,13 @@ export const StudentDashboard: React.FC<StudentViewProps> = ({ lang, theme = 'da
                         <button 
                             key={item.id} 
                             onClick={() => onNavigate?.(item.id)} 
-                            className={`group p-8 bg-white border-[3px] border-black rounded-[32px] text-left transition-all hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]`}
+                            className={`group p-8 bg-white dark:bg-zinc-900 border-[3px] border-border rounded-[32px] text-left transition-all hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] hover:translate-x-[-4px] hover:translate-y-[-4px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]`}
                         >
-                            <div className={`w-16 h-16 rounded-2xl border-[3px] border-black flex items-center justify-center mb-6 transition-transform group-hover:scale-110 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${item.bg}`}>
+                            <div className={`w-16 h-16 rounded-2xl border-[3px] border-border flex items-center justify-center mb-6 transition-transform group-hover:scale-110 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] ${item.bg}`}>
                                 <item.icon className={`w-8 h-8 ${item.color}`} />
                             </div>
-                            <h3 className="font-black text-xl text-black mb-3 uppercase tracking-tight group-hover:text-primary transition-colors">{item.title}</h3>
-                            <p className="text-sm font-medium text-muted leading-relaxed">{item.desc}</p>
+                            <h3 className="font-black text-xl text-zinc-900 dark:text-zinc-100 mb-3 uppercase tracking-tight group-hover:text-primary transition-colors">{item.title}</h3>
+                            <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 leading-relaxed">{item.desc}</p>
                         </button>
                     ))}
                 </div>
@@ -630,19 +630,23 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-100px)] animate-in fade-in duration-300">
             <div className="lg:col-span-2 space-y-6 overflow-y-auto pr-2">
                 <div className="flex items-center gap-4 mb-2">
-                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent text-slate-900 dark:text-white">
+                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent text-zinc-900 dark:text-zinc-100 hover:text-primary dark:hover:text-primary transition-colors">
                         <ArrowLeft className="w-5 h-5 mr-2" /> Back
                     </Button>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t.aiTools}</h2>
+                    <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 uppercase tracking-tight">{t.aiTools}</h2>
                 </div>
                 
                 <Card className="p-6 md:p-8">
-                    <div className="flex gap-2 mb-6 border-b border-border pb-4 px-1 py-1 overflow-x-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <div className="flex gap-2 mb-6 border-b-[3px] border-border pb-4 px-1 py-1 overflow-x-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                         {['SUMMARY', 'FLASHCARD', 'QA', 'MINDMAP', 'PROJECT_TRACKER', 'BIBLIO', 'VOICE_FLOW'].map((k) => (
                             <button 
                                 key={k}
                                 onClick={() => { setActiveTool(k as any); setResult(null); setInputText(''); }}
-                                className={`px-4 py-2 rounded-full text-xs md:text-sm font-black uppercase tracking-wider transition-all whitespace-nowrap shrink-0 border-2 ${activeTool === k ? 'bg-primary text-slate-950 border-border shadow-[var(--brutalist-shadow-sm)]' : 'bg-surface text-slate-600 dark:text-zinc-300 border-transparent hover:border-border/50 hover:text-slate-900 dark:hover:text-white'}`}
+                                className={`px-4 py-2 rounded-xl text-xs md:text-sm font-black uppercase tracking-wider transition-all whitespace-nowrap shrink-0 border-[3px] ${
+                                    activeTool === k 
+                                        ? 'bg-primary text-zinc-950 border-border shadow-[var(--brutalist-shadow-sm)]' 
+                                        : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-border/40 hover:border-border hover:text-zinc-900 dark:hover:text-white'
+                                }`}
                             >
                                 {k === 'PROJECT_TRACKER' ? 'Group Project' : k === 'BIBLIO' ? 'Citation' : k === 'VOICE_FLOW' ? 'Voice 2 Flow' : t[k.toLowerCase()] || k}
                             </button>
@@ -651,9 +655,9 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
 
                     <div className="space-y-5">
                         {/* Source Selection Area */}
-                        <div className="p-4 md:p-5 bg-background border-[3px] border-border rounded-xl shadow-[var(--brutalist-shadow-sm)] space-y-3 w-full">
+                        <div className="p-4 md:p-5 bg-zinc-50 dark:bg-zinc-800/60 border-[3px] border-border rounded-xl shadow-[var(--brutalist-shadow-sm)] space-y-3 w-full">
                             <div className="flex items-center justify-between">
-                                <span className="text-xs md:text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">Input Source</span>
+                                <span className="text-xs md:text-sm font-black uppercase tracking-wider text-zinc-900 dark:text-zinc-100">Input Source</span>
                                 {(uploadedFile || selectedMaterialId) && <Badge variant="success">Source Active</Badge>}
                             </div>
                             
@@ -661,13 +665,13 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                                 <div className="w-full">
                                      <div className="relative w-full">
                                          <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept="image/*,application/pdf" />
-                                         <Button variant="secondary" size="md" className="w-full text-xs h-10 md:h-11" onClick={() => fileInputRef.current?.click()}>
+                                         <Button variant="secondary" size="md" className="w-full text-xs h-11" onClick={() => fileInputRef.current?.click()}>
                                              <Upload className="w-4 h-4 mr-2 shrink-0" /> Upload File (PDF/Image)
                                          </Button>
                                      </div>
                                 </div>
                                 <div className="w-full">
-                                     <Select value={selectedMaterialId} onChange={(e) => { setSelectedMaterialId(e.target.value); if (e.target.value) setUploadedFile(null); }} className="w-full text-xs h-10 md:h-11">
+                                     <Select value={selectedMaterialId} onChange={(e) => { setSelectedMaterialId(e.target.value); if (e.target.value) setUploadedFile(null); }} className="w-full text-xs h-11">
                                          <option value="">Select Saved Material</option>
                                          {materials.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
                                      </Select>
@@ -678,11 +682,11 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                                 <div className="flex items-center justify-between p-3 bg-primary/10 rounded-xl border-2 border-border shadow-[var(--brutalist-shadow-sm)]">
                                     <div className="flex items-center gap-2 overflow-hidden">
                                         <FileIcon className="w-4 h-4 text-primary shrink-0" />
-                                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{uploadedFile.name}</span>
+                                        <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">{uploadedFile.name}</span>
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
-                                         <button onClick={handleSaveMaterial} className="p-1 text-slate-900 dark:text-white hover:text-primary transition-colors" title="Save to Materials"><Save className="w-4 h-4" /></button>
-                                         <button onClick={() => { setUploadedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="p-1 text-slate-500 hover:text-red-500 transition-colors"><X className="w-4 h-4" /></button>
+                                         <button onClick={handleSaveMaterial} className="p-1 text-zinc-900 dark:text-zinc-100 hover:text-primary transition-colors" title="Save to Materials"><Save className="w-4 h-4" /></button>
+                                         <button onClick={() => { setUploadedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="p-1 text-zinc-500 hover:text-red-500 transition-colors"><X className="w-4 h-4" /></button>
                                     </div>
                                 </div>
                             )}
@@ -697,10 +701,10 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                         )}
 
                         {activeTool === 'QA' && (
-                            <div className="p-4 bg-background border border-border rounded-lg space-y-4 animate-in fade-in slide-in-from-top-2">
+                            <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 border-[3px] border-border rounded-xl space-y-4 animate-in fade-in slide-in-from-top-2">
                                 <div className="flex items-center gap-2 mb-2">
                                     <Settings2 className="w-4 h-4 text-primary" />
-                                    <span className="text-sm font-bold text-text">Configure Question Types</span>
+                                    <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Configure Question Types</span>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {[
@@ -714,12 +718,12 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                                         const key = type.id as keyof typeof qaSettings;
                                         const setting = qaSettings[key];
                                         return (
-                                            <div key={String(key)} className="flex items-center justify-between p-2 border border-border rounded bg-surface/50">
+                                            <div key={String(key)} className="flex items-center justify-between p-2.5 border-[2px] border-border rounded-lg bg-white dark:bg-zinc-800">
                                                 <div className="flex items-center gap-2">
                                                     <input type="checkbox" id={`check-${String(key)}`} checked={setting.enabled} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], enabled: e.target.checked }}))} className="w-4 h-4 rounded text-primary focus:ring-primary" />
-                                                    <label htmlFor={`check-${String(key)}`} className="text-sm text-text cursor-pointer select-none">{type.label} ({type.marks})</label>
+                                                    <label htmlFor={`check-${String(key)}`} className="text-sm font-bold text-zinc-900 dark:text-zinc-100 cursor-pointer select-none">{type.label} ({type.marks})</label>
                                                 </div>
-                                                {setting.enabled && <input type="number" min="1" max="20" value={setting.count} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], count: parseInt(e.target.value) || 1 }}))} className="w-12 px-1 py-1 text-xs border border-border rounded bg-background text-text text-center focus:outline-none focus:border-primary" />}
+                                                {setting.enabled && <input type="number" min="1" max="20" value={setting.count} onChange={(e) => setQaSettings(prev => ({...prev, [key]: { ...prev[key], count: parseInt(e.target.value) || 1 }}))} className="w-12 px-1 py-1 text-xs border-[2px] border-border rounded bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-center focus:outline-none focus:border-primary" />}
                                             </div>
                                         );
                                     })}
@@ -727,7 +731,7 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                             </div>
                         )}
 
-                        <Textarea rows={4} placeholder={`${t.pasteText || 'Paste text'} or describe file...`} value={inputText} onChange={(e) => setInputText(e.target.value)} className="w-full" />
+                        <Textarea rows={5} placeholder={`${t.pasteText || 'Paste text'} or describe file...`} value={inputText} onChange={(e) => setInputText(e.target.value)} className="w-full min-h-[144px] md:min-h-[180px] p-4 text-sm font-semibold" />
                         <div className="flex justify-end">
                             <Button onClick={handleGenerate} loading={loading}><Zap className="w-4 h-4 mr-2" /> {t.generate}</Button>
                         </div>
@@ -757,17 +761,17 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
 
             <div className="space-y-4 overflow-y-auto h-full pl-2">
                 <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-lg text-slate-900 dark:text-white">{t.history}</h3>
-                    <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">{history.length} {t.items}</span>
+                    <h3 className="font-black text-lg uppercase tracking-tight text-zinc-900 dark:text-zinc-100">{t.history}</h3>
+                    <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400">{history.length} {t.items}</span>
                 </div>
                 {history.map((item) => (
-                    <div key={item.id} className="bg-surface border-[3px] border-border rounded-xl p-3 shadow-[var(--brutalist-shadow-sm)] group hover:border-primary transition-colors">
+                    <div key={item.id} className="bg-white dark:bg-zinc-900 border-[3px] border-border rounded-xl p-3 shadow-[var(--brutalist-shadow-sm)] group hover:border-primary transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-sm font-bold line-clamp-1 text-slate-900 dark:text-white">{item.title}</h4>
-                            <button onClick={() => handleDeleteHistory(item.id)} className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+                            <h4 className="text-sm font-bold line-clamp-1 text-zinc-900 dark:text-zinc-100">{item.title}</h4>
+                            <button onClick={() => handleDeleteHistory(item.id)} className="text-zinc-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">{new Date(item.createdAt).toLocaleDateString()}</span>
+                            <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">{new Date(item.createdAt).toLocaleDateString()}</span>
                             <Button variant="secondary" size="sm" className="h-7 text-xs px-2.5" onClick={() => setResult(item.content)}>{t.view}</Button>
                         </div>
                     </div>
