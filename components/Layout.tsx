@@ -120,10 +120,11 @@ const Layout: React.FC<LayoutProps> = ({
   const PersonaButton = ({ p, label, icon: Icon, colorClass }: any) => (
       <button 
           onClick={() => handleMobileClick(() => onSwitchPersona(p))} 
-          className={`w-full flex items-center gap-3 px-3 py-2 border-2 border-border font-black uppercase text-[10px] tracking-tighter transition-all ${currentPersona === p ? `${colorClass} text-white shadow-[var(--brutalist-shadow-sm)] translate-x-[-1px] translate-y-[-1px]` : 'bg-surface text-text hover:bg-accent/20'}`}
+          className={`w-full flex items-center gap-2 px-2 py-1.5 border-2 border-border font-black uppercase text-xs tracking-tight transition-all rounded-lg ${currentPersona === p ? `${colorClass} text-slate-950 shadow-[var(--brutalist-shadow-sm)] translate-x-[-1px] translate-y-[-1px]` : 'bg-surface text-slate-900 dark:text-white hover:bg-accent/20'}`}
+          title={label}
       >
           <Icon className="w-4 h-4 shrink-0" />
-          <span className="truncate">{label}</span>
+          <span className="whitespace-normal leading-tight text-left">{label}</span>
       </button>
   );
 
@@ -169,8 +170,8 @@ const Layout: React.FC<LayoutProps> = ({
         <div className="p-4 border-t-[4px] border-border space-y-3 bg-surface">
              {sidebarWidth > 200 && (
                  <div className="p-3 bg-accent/10 border-[3px] border-border shadow-[var(--brutalist-shadow-sm)] rounded-xl">
-                    <p className="text-[9px] text-text mb-2 font-black uppercase tracking-[0.15em]">{t.switchRole || 'SWITCH ROLE'}</p>
-                    <div className="grid grid-cols-2 gap-1">
+                    <p className="text-[10px] text-slate-900 dark:text-white mb-2 font-black uppercase tracking-[0.15em]">{t.switchRole || 'SWITCH ROLE'}</p>
+                    <div className="grid grid-cols-2 gap-1.5">
                         <PersonaButton p="STUDENT" label="Student" icon={GraduationCap} colorClass="bg-violet-400" />
                         <PersonaButton p="TEACHER" label="Teacher" icon={BookOpen} colorClass="bg-emerald-400" />
                         <PersonaButton p="PROFESSIONAL" label="Professional" icon={Briefcase} colorClass="bg-blue-400" />

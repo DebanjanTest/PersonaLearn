@@ -22,7 +22,7 @@ export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { 
   const variants = {
     primary: "bg-primary text-black border-border",
     secondary: "bg-accent text-black border-border",
-    ghost: "bg-transparent border-transparent shadow-none hover:bg-text/5",
+    ghost: "bg-transparent border-transparent shadow-none hover:bg-text/5 text-slate-900 dark:text-white",
     danger: "bg-danger text-white border-border"
   };
   
@@ -34,23 +34,23 @@ export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { 
   );
 };
 
-export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
+export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ className = '', ...props }) => (
   <input 
-    className="w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-2.5 text-xs font-black text-text placeholder:text-muted/50 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] rounded-xl"
+    className={`w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-2.5 text-xs font-bold text-text placeholder:text-muted focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] rounded-xl ${className}`}
     {...props} 
   />
 );
 
-export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => (
+export const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({ className = '', ...props }) => (
   <textarea 
-    className="w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-2.5 text-xs font-black text-text placeholder:text-muted/50 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] resize-y min-h-[100px] rounded-xl"
+    className={`w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold text-text placeholder:text-muted focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] resize-y min-h-[110px] rounded-xl ${className}`}
     {...props} 
   />
 );
 
-export const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (props) => (
-   <div className="relative">
-    <select className="w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-2.5 text-xs font-black text-text focus:outline-none appearance-none transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] rounded-xl" {...props}>
+export const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = ({ className = '', ...props }) => (
+   <div className="relative w-full">
+    <select className={`w-full bg-surface border-[3px] border-border px-3 py-2 md:px-4 md:py-2.5 text-xs font-bold text-text focus:outline-none appearance-none transition-all duration-200 shadow-[var(--brutalist-shadow-sm)] rounded-xl ${className}`} {...props}>
         {props.children}
     </select>
     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text">
@@ -65,9 +65,9 @@ export const Label: React.FC<{ children: React.ReactNode; className?: string }> 
 
 export const Badge: React.FC<{ children: React.ReactNode; variant?: 'success' | 'warning' | 'info' }> = ({ children, variant = 'info' }) => {
     const colors = {
-        success: 'bg-secondary text-black',
-        warning: 'bg-accent text-black',
-        info: 'bg-primary text-black'
+        success: 'bg-secondary text-slate-950 font-black',
+        warning: 'bg-accent text-slate-950 font-black',
+        info: 'bg-primary text-slate-950 font-black'
     };
     return (
         <span className={`px-4 py-1.5 border-[3px] border-border text-[10px] font-black uppercase tracking-widest shadow-[var(--brutalist-shadow-sm)] rounded-full ${colors[variant]}`}>

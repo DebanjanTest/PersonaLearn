@@ -630,44 +630,44 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-100px)] animate-in fade-in duration-300">
             <div className="lg:col-span-2 space-y-6 overflow-y-auto pr-2">
                 <div className="flex items-center gap-4 mb-2">
-                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent">
+                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent text-slate-900 dark:text-white">
                         <ArrowLeft className="w-5 h-5 mr-2" /> Back
                     </Button>
-                    <h2 className="text-2xl font-bold text-text">{t.aiTools}</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t.aiTools}</h2>
                 </div>
                 
-                <Card>
-                    <div className="flex gap-2 mb-6 border-b border-border pb-4 overflow-x-auto">
+                <Card className="p-6 md:p-8">
+                    <div className="flex gap-2 mb-6 border-b border-border pb-4 px-1 py-1 overflow-x-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                         {['SUMMARY', 'FLASHCARD', 'QA', 'MINDMAP', 'PROJECT_TRACKER', 'BIBLIO', 'VOICE_FLOW'].map((k) => (
                             <button 
                                 key={k}
                                 onClick={() => { setActiveTool(k as any); setResult(null); setInputText(''); }}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${activeTool === k ? 'bg-primary text-white shadow-md' : 'bg-surface text-muted hover:text-text hover:bg-black/5 dark:hover:bg-white/5'}`}
+                                className={`px-4 py-2 rounded-full text-xs md:text-sm font-black uppercase tracking-wider transition-all whitespace-nowrap shrink-0 border-2 ${activeTool === k ? 'bg-primary text-slate-950 border-border shadow-[var(--brutalist-shadow-sm)]' : 'bg-surface text-slate-600 dark:text-zinc-300 border-transparent hover:border-border/50 hover:text-slate-900 dark:hover:text-white'}`}
                             >
                                 {k === 'PROJECT_TRACKER' ? 'Group Project' : k === 'BIBLIO' ? 'Citation' : k === 'VOICE_FLOW' ? 'Voice 2 Flow' : t[k.toLowerCase()] || k}
                             </button>
                         ))}
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-5">
                         {/* Source Selection Area */}
-                        <div className="p-4 bg-background border border-border rounded-lg space-y-3">
+                        <div className="p-4 md:p-5 bg-background border-[3px] border-border rounded-xl shadow-[var(--brutalist-shadow-sm)] space-y-3 w-full">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-muted">Input Source</span>
+                                <span className="text-xs md:text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">Input Source</span>
                                 {(uploadedFile || selectedMaterialId) && <Badge variant="success">Source Active</Badge>}
                             </div>
                             
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div className="space-y-2">
-                                     <div className="relative">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                                <div className="w-full">
+                                     <div className="relative w-full">
                                          <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept="image/*,application/pdf" />
-                                         <Button variant="secondary" size="sm" className="w-full text-xs" onClick={() => fileInputRef.current?.click()}>
-                                             <Upload className="w-3 h-3 mr-2" /> Upload File (PDF/Image)
+                                         <Button variant="secondary" size="md" className="w-full text-xs h-10 md:h-11" onClick={() => fileInputRef.current?.click()}>
+                                             <Upload className="w-4 h-4 mr-2 shrink-0" /> Upload File (PDF/Image)
                                          </Button>
                                      </div>
                                 </div>
-                                <div className="space-y-2">
-                                     <Select value={selectedMaterialId} onChange={(e) => { setSelectedMaterialId(e.target.value); if (e.target.value) setUploadedFile(null); }} className="w-full text-xs py-1.5 h-8">
+                                <div className="w-full">
+                                     <Select value={selectedMaterialId} onChange={(e) => { setSelectedMaterialId(e.target.value); if (e.target.value) setUploadedFile(null); }} className="w-full text-xs h-10 md:h-11">
                                          <option value="">Select Saved Material</option>
                                          {materials.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
                                      </Select>
@@ -675,14 +675,14 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
                             </div>
 
                             {uploadedFile && (
-                                <div className="flex items-center justify-between p-2 bg-primary/10 rounded border border-primary/20">
+                                <div className="flex items-center justify-between p-3 bg-primary/10 rounded-xl border-2 border-border shadow-[var(--brutalist-shadow-sm)]">
                                     <div className="flex items-center gap-2 overflow-hidden">
                                         <FileIcon className="w-4 h-4 text-primary shrink-0" />
-                                        <span className="text-xs text-text truncate">{uploadedFile.name}</span>
+                                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate">{uploadedFile.name}</span>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                         <button onClick={handleSaveMaterial} className="text-primary hover:text-primary-hover" title="Save to Materials"><Save className="w-4 h-4" /></button>
-                                         <button onClick={() => { setUploadedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="text-muted hover:text-red-500"><X className="w-4 h-4" /></button>
+                                    <div className="flex items-center gap-2 shrink-0">
+                                         <button onClick={handleSaveMaterial} className="p-1 text-slate-900 dark:text-white hover:text-primary transition-colors" title="Save to Materials"><Save className="w-4 h-4" /></button>
+                                         <button onClick={() => { setUploadedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="p-1 text-slate-500 hover:text-red-500 transition-colors"><X className="w-4 h-4" /></button>
                                     </div>
                                 </div>
                             )}
@@ -757,18 +757,18 @@ export const StudentTools: React.FC<StudentViewProps> = ({ lang, onNavigate }) =
 
             <div className="space-y-4 overflow-y-auto h-full pl-2">
                 <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-lg text-text">{t.history}</h3>
-                    <span className="text-xs text-muted">{history.length} {t.items}</span>
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-white">{t.history}</h3>
+                    <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">{history.length} {t.items}</span>
                 </div>
                 {history.map((item) => (
-                    <div key={item.id} className="bg-surface border border-border rounded-lg p-3 group hover:border-primary transition-colors">
+                    <div key={item.id} className="bg-surface border-[3px] border-border rounded-xl p-3 shadow-[var(--brutalist-shadow-sm)] group hover:border-primary transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-sm font-medium line-clamp-1 text-text">{item.title}</h4>
-                            <button onClick={() => handleDeleteHistory(item.id)} className="text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
+                            <h4 className="text-sm font-bold line-clamp-1 text-slate-900 dark:text-white">{item.title}</h4>
+                            <button onClick={() => handleDeleteHistory(item.id)} className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-xs text-muted">{new Date(item.createdAt).toLocaleDateString()}</span>
-                            <Button variant="secondary" size="sm" className="h-6 text-xs px-2" onClick={() => setResult(item.content)}>{t.view}</Button>
+                            <span className="text-xs font-semibold text-slate-600 dark:text-zinc-400">{new Date(item.createdAt).toLocaleDateString()}</span>
+                            <Button variant="secondary" size="sm" className="h-7 text-xs px-2.5" onClick={() => setResult(item.content)}>{t.view}</Button>
                         </div>
                     </div>
                 ))}
@@ -1015,10 +1015,10 @@ export const StudentExams: React.FC<StudentViewProps & { onNavigate?: (view: str
         return (
             <div className="space-y-6 animate-in slide-in-from-right duration-300">
                 <div className="flex items-center gap-4 mb-4">
-                    <Button variant="ghost" onClick={() => setViewMode('LIST')} className="pl-0 hover:bg-transparent">
+                    <Button variant="ghost" onClick={() => setViewMode('LIST')} className="pl-0 hover:bg-transparent text-slate-900 dark:text-white">
                         <ArrowLeft className="w-5 h-5 mr-2" /> Back
                     </Button>
-                    <h2 className="text-2xl font-bold text-text">Generate New Exam</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Generate New Exam</h2>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -1093,10 +1093,10 @@ export const StudentExams: React.FC<StudentViewProps & { onNavigate?: (view: str
         <div className="space-y-6 animate-in fade-in duration-300">
              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent">
+                    <Button variant="ghost" onClick={() => onNavigate?.('dashboard')} className="pl-0 hover:bg-transparent text-slate-900 dark:text-white">
                         <ArrowLeft className="w-5 h-5 mr-2" /> Dashboard
                     </Button>
-                    <h2 className="text-2xl font-bold text-text">Practice Exams</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Practice Exams</h2>
                 </div>
                 <Button onClick={() => setViewMode('CREATE')}><Plus className="w-4 h-4 mr-2" /> Create New Exam</Button>
             </div>
